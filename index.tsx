@@ -1960,16 +1960,43 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             const skillsAnalysis = resultJson.skills_analysis || {};
             
             // Create detailed analysis text
-            let analysisText = `📊 **Overall Match: ${overallScore}%**\n\n`;
+            let analysisText = `# 📊 Resume Analysis Report\n\n`;
             
-            // Add breakdown scores
-            if (breakdown.skills_score !== undefined) analysisText += `🎯 Skills Match: ${breakdown.skills_score}%\n`;
-            if (breakdown.experience_score !== undefined) analysisText += `⏰ Experience Match: ${breakdown.experience_score}%\n`;
-            if (breakdown.keywords_score !== undefined) analysisText += `🔑 Keywords Match: ${breakdown.keywords_score}%\n`;
-            if (breakdown.education_score !== undefined) analysisText += `🎓 Education Match: ${breakdown.education_score}%\n\n`;
+            // Overall score with visual indicator
+            const getScoreColor = (score: number) => {
+                if (score >= 80) return '🟢';
+                if (score >= 60) return '🟡';
+                if (score >= 40) return '🟠';
+                return '🔴';
+            };
             
-            // Show raw JSON for debugging (first 1000 chars)
-            analysisText += `🔍 **Raw AI Response (first 1000 chars):**\n\`\`\`json\n${JSON.stringify(resultJson, null, 2).substring(0, 1000)}...\n\`\`\`\n\n`;
+            analysisText += `## Overall Match: ${getScoreColor(overallScore)} ${overallScore}%\n\n`;
+            
+            // Add breakdown scores with visual indicators
+            if (breakdown.skills_score !== undefined) {
+                analysisText += `### 🎯 Skills Match: ${getScoreColor(breakdown.skills_score)} ${breakdown.skills_score}%\n`;
+            }
+            if (breakdown.experience_score !== undefined) {
+                analysisText += `### ⏰ Experience Match: ${getScoreColor(breakdown.experience_score)} ${breakdown.experience_score}%\n`;
+            }
+            if (breakdown.keywords_score !== undefined) {
+                analysisText += `### 🔑 Keywords Match: ${getScoreColor(breakdown.keywords_score)} ${breakdown.keywords_score}%\n`;
+            }
+            if (breakdown.education_score !== undefined) {
+                analysisText += `### 🎓 Education Match: ${getScoreColor(breakdown.education_score)} ${breakdown.education_score}%\n`;
+            }
+            analysisText += '\n';
+            
+            // Add quick summary
+            if (overallScore >= 80) {
+                analysisText += `🎉 **Excellent Match!** Your resume strongly aligns with this position.\n\n`;
+            } else if (overallScore >= 60) {
+                analysisText += `👍 **Good Match** Your resume has solid alignment with some room for improvement.\n\n`;
+            } else if (overallScore >= 40) {
+                analysisText += `⚠️ **Moderate Match** Your resume needs some adjustments to better align with this role.\n\n`;
+            } else {
+                analysisText += `❌ **Poor Match** Your resume requires significant updates to align with this position.\n\n`;
+            }
             
             // Add job requirements summary
             const jobReq = transparentAnalysis.job_requirements || resultJson.job_requirements;
@@ -2026,46 +2053,50 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                 
                 // Show top job keywords
                 if (ka.job_keywords && ka.job_keywords.length > 0) {
-                    analysisText += `🏆 **Top Job Keywords:**\n`;
+                    analysisText += `## 🏆 Most Important Job Requirements\n\n`;
                     ka.job_keywords.slice(0, 10).forEach((kw: any, i: number) => {
-                        analysisText += `${i + 1}. ${kw.keyword} (${kw.category}, score: ${kw.importance_score})\n`;
+                        const importance = kw.importance_score >= 7 ? '🔥' : kw.importance_score >= 5 ? '⚡' : '📌';
+                        analysisText += `${importance} **${kw.keyword}** (${kw.category})\n`;
                     });
                     analysisText += '\n';
                 } else {
-                    analysisText += `🏆 **Top Job Keywords:** Not provided by AI\n\n`;
+                    analysisText += `## 🏆 Most Important Job Requirements\n*Not provided by AI*\n\n`;
                 }
                 
                 // Show top resume keywords
                 if (ka.resume_keywords && ka.resume_keywords.length > 0) {
-                    analysisText += `📝 **Top Resume Keywords:**\n`;
+                    analysisText += `## 📝 Your Resume Highlights\n\n`;
                     ka.resume_keywords.slice(0, 10).forEach((kw: any, i: number) => {
-                        analysisText += `${i + 1}. ${kw.keyword} (${kw.category}, score: ${kw.relevance_score})\n`;
+                        const strength = kw.relevance_score >= 12 ? '💪' : kw.relevance_score >= 8 ? '✅' : '📋';
+                        analysisText += `${strength} **${kw.keyword}** (${kw.category})\n`;
                     });
                     analysisText += '\n';
                 } else {
-                    analysisText += `📝 **Top Resume Keywords:** Not provided by AI\n\n`;
+                    analysisText += `## 📝 Your Resume Highlights\n*Not provided by AI*\n\n`;
                 }
                 
                 // Show keyword matches
                 if (ka.keyword_matches && ka.keyword_matches.length > 0) {
-                    analysisText += `✅ **Keyword Matches:**\n`;
+                    analysisText += `## ✅ Strong Matches\n\n`;
                     ka.keyword_matches.slice(0, 10).forEach((match: any, i: number) => {
-                        analysisText += `${i + 1}. "${match.job_keyword}" ↔ "${match.resume_keyword}" (${match.match_type}, ${Math.round(match.match_score * 100)}%)\n`;
+                        const matchIcon = match.match_score >= 0.8 ? '🎯' : match.match_score >= 0.6 ? '✅' : '🔄';
+                        analysisText += `${matchIcon} **${match.job_keyword}** ↔ **${match.resume_keyword}**\n`;
                     });
                     analysisText += '\n';
                 } else {
-                    analysisText += `✅ **Keyword Matches:** Not provided by AI\n\n`;
+                    analysisText += `## ✅ Strong Matches\n*Not provided by AI*\n\n`;
                 }
                 
                 // Show unmatched keywords
                 if (ka.unmatched_job_keywords && ka.unmatched_job_keywords.length > 0) {
-                    analysisText += `❌ **Missing Keywords:**\n`;
+                    analysisText += `## ❌ Missing Skills\n\n`;
+                    analysisText += `These skills are important for this role but missing from your resume:\n\n`;
                     ka.unmatched_job_keywords.forEach((keyword: string, i: number) => {
-                        analysisText += `${i + 1}. ${keyword}\n`;
+                        analysisText += `🔴 **${keyword}**\n`;
                     });
                     analysisText += '\n';
                 } else {
-                    analysisText += `❌ **Missing Keywords:** Not provided by AI\n\n`;
+                    analysisText += `## ❌ Missing Skills\n*Not provided by AI*\n\n`;
                 }
             } else {
                 analysisText += `🔍 **Keyword Analysis:** Not provided by AI\n\n`;
@@ -2115,26 +2146,28 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             // Add recommendations
             const allRecommendations = recommendations || resultJson.missing_keywords || [];
             if (allRecommendations && allRecommendations.length > 0) {
-                analysisText += `💡 **Recommendations:**\n`;
+                analysisText += `## 💡 Action Plan\n\n`;
                 
                 // Handle both new format (objects) and old format (strings)
                 if (typeof allRecommendations[0] === 'object') {
                     allRecommendations.forEach((rec: any, i: number) => {
-                        analysisText += `${i + 1}. **${rec.action || 'No action specified'}**\n`;
-                        if (rec.keyword_to_add) analysisText += `   Add keyword: "${rec.keyword_to_add}"\n`;
-                        if (rec.reason) analysisText += `   Reason: ${rec.reason}\n`;
-                        if (rec.priority) analysisText += `   Priority: ${rec.priority}\n`;
+                        const priorityIcon = rec.priority === 1 ? '🔥' : rec.priority === 2 ? '⚡' : '📌';
+                        analysisText += `### ${priorityIcon} Priority ${rec.priority || i + 1}\n`;
+                        analysisText += `**${rec.action || 'No action specified'}**\n\n`;
+                        if (rec.keyword_to_add) analysisText += `**Add to resume:** ${rec.keyword_to_add}\n`;
+                        if (rec.reason) analysisText += `**Why:** ${rec.reason}\n`;
                         analysisText += '\n';
                     });
                 } else {
                     // Old format - just strings
-                    allRecommendations.forEach((keyword: string, i: number) => {
-                        analysisText += `${i + 1}. **Add keyword: "${keyword}"**\n`;
-                        analysisText += `   Reason: This keyword appears in the job description but is missing from your resume\n\n`;
+                    analysisText += `### 🔥 Top Priorities\n\n`;
+                    allRecommendations.slice(0, 5).forEach((keyword: string, i: number) => {
+                        analysisText += `**${i + 1}. Add "${keyword}" to your resume**\n`;
+                        analysisText += `This skill is highly valued for this position.\n\n`;
                     });
                 }
             } else {
-                analysisText += `💡 **Recommendations:** No recommendations provided by AI\n\n`;
+                analysisText += `## 💡 Action Plan\n*No specific recommendations provided*\n\n`;
             }
             
             updateCurrentToolState({
