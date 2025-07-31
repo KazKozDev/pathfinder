@@ -1,5 +1,7 @@
 # Pathfinder ▸ An Intelligent Job Search Assistant
 
+> Lost track of your applications? Pathfinder brings order to your job search with smart AI assistance
+
 ![React](https://img.shields.io/badge/React-18+-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
@@ -16,7 +18,7 @@ The application runs **locally on your machine** (React + Node.js + SQLite), ens
 - [Application Features](#application-features)
 - [For Developers: Technical Implementation](#for-developers-technical-implementation)
 - [Getting Started](#getting-started)
-- [License](#license)
+- [Contributing](#contributing)
 
 ## Application Features
 This section describes Pathfinder's main screens and functions in the order you will encounter them.
