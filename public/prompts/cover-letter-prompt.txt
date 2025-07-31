@@ -1,0 +1,46 @@
+Generate a cover letter for {{JSON_DATA}}. Structure it according to these points:
+
+Introduction:
+
+Briefly introduce yourself (name and qualification).
+State the position and the reason for your application.
+Mention the source where you found the vacancy, if possible.
+
+Main Section:
+
+Describe relevant skills and experience, especially those matching the job requirements.
+Explain why you are a good fit for the role and for this company in particular.
+Highlight unique qualities that set you apart from other candidates.
+Use keywords from the job description.
+
+Conclusion:
+
+Express your willingness for an interview or further discussion.
+Thank the reader for their time and consideration.
+Mention that your CV/resume is attached.
+Details and Tone:
+The letter should be no longer than one page (3–4 paragraphs).
+Use a formal tone; avoid jokes or slang.
+Personalize the greeting (Dear Mr./Ms. [Last Name], or Dear Hiring Manager if unsure).
+
+Useful Phrases:
+
+I would like to apply for...
+Among my strengths are...
+I am convinced that...
+Looking forward to hearing from you.
+
+Check:
+
+Proofread for errors and avoid repeating information from your resume.
+Tailor the letter to each position.
+Show the generated letter in this format:
+[Your name, contact details, date]
+[Recipient's name, position, company address]
+[Greeting]
+[Introduction]
+[Main section]
+[Conclusion]
+[Closing (Sincerely, Best regards, your name)]
+[Mention of attached resume]
+

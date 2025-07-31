@@ -221,6 +221,71 @@ const availableTools: Tool[] = [
     { id: 'linkedin_analysis', name: 'LinkedIn Analysis', description: 'Analyze profiles and company pages on LinkedIn.' },
 ];
 
+// Function to load prompts from files
+const loadPromptsFromFiles = async (): Promise<{ coverLetter: string, resumeChecker: string }> => {
+    try {
+        const [coverLetterResponse, resumeCheckerResponse] = await Promise.all([
+            fetch('/prompts/cover-letter-prompt.txt'),
+            fetch('/prompts/resume-checker-prompt.txt')
+        ]);
+        
+        const coverLetter = await coverLetterResponse.text();
+        const resumeChecker = await resumeCheckerResponse.text();
+        
+        return { coverLetter, resumeChecker };
+    } catch (error) {
+        console.error('Failed to load prompts from files:', error);
+        // Fallback to default prompts
+        return {
+            coverLetter: `Generate a cover letter for {{JSON_DATA}}. Structure it according to these points:
+
+Introduction:
+Briefly introduce yourself (name and qualification).
+State the position and the reason for your application.
+Mention the source where you found the vacancy, if possible.
+
+Main Section:
+Describe relevant skills and experience, especially those matching the job requirements.
+Explain why you are a good fit for the role and for this company in particular.
+Highlight unique qualities that set you apart from other candidates.
+Use keywords from the job description.
+
+Conclusion:
+Express your willingness for an interview or further discussion.
+Thank the reader for their time and consideration.
+Mention that your CV/resume is attached.`,
+            resumeChecker: `You are a professional resume analyzer. Your task is to evaluate how well a candidate's resume matches a specific job description.
+
+**ANALYSIS INSTRUCTIONS:**
+- Compare the resume content against the job requirements
+- Identify key skills and qualifications from the job description
+- Check if the resume highlights relevant experience
+- Assess the overall match quality
+- Provide specific recommendations for improvement
+
+**JOB DESCRIPTION:**
+{{JOB_DESCRIPTION}}
+
+**RESUME CONTENT:**
+{{RESUME_CONTENT}}
+
+**EVALUATION CRITERIA:**
+1. Skills Match: How well do the resume skills align with job requirements?
+2. Experience Relevance: Does the experience demonstrate the required capabilities?
+3. Keywords: Are important job keywords present in the resume?
+4. Formatting: Is the resume clear and professional?
+
+**PROVIDE:**
+- Match score (0-100%)
+- Key missing skills/qualifications
+- Specific improvement suggestions
+- Overall assessment
+
+Analyze the resume thoroughly and provide actionable feedback.`
+        };
+    }
+};
+
 const initialSettings: Settings = {
     profile: {
         name: "Alex Doe",
@@ -236,41 +301,8 @@ const initialSettings: Settings = {
         shareAnonymizedData: true,
     },
     prompts: {
-        resumeChecker: `You are a brutally honest and critical AI resume screener. Your goal is to help the user improve their resume.
-Analyze the resume against the job description with extreme scrutiny. Identify key skills and qualifications from the job description that are missing from the resume. Provide a realistic match score.
-
-Your analysis MUST be based exclusively on the provided job description and resume content.
-
----
-**JOB DESCRIPTION:**
-{{JOB_DESCRIPTION}}
----
-**RESUME CONTENT:**
-{{RESUME_CONTENT}}
----`,
-        coverLetter: `You are a professional cover letter writer. Your task is to create a compelling, personalized cover letter based on the provided candidate and job information.
-
-**INSTRUCTIONS:**
-- Write a professional cover letter in a formal business tone
-- Use the candidate's name, experience, and qualifications from their resume
-- Reference specific requirements from the job description
-- Keep it concise (300-400 words)
-- Include a clear opening, body paragraphs highlighting relevant experience, and a strong closing
-- Address it to the hiring manager or specific contact if available
-- Use the current date provided
-
-**CANDIDATE AND JOB DATA:**
-{{JSON_DATA}}
-
-**REQUIREMENTS:**
-- Start with a professional greeting
-- Explain why you're interested in this specific position and company
-- Connect your experience to the job requirements
-- Show enthusiasm and fit for the role
-- End with a call to action requesting an interview
-- Use proper business letter format
-
-Please generate a complete, ready-to-use cover letter.`,
+        resumeChecker: `Loading...`,
+        coverLetter: `Loading...`,
         interviewQuestions: `You are an AI Interviewer. Your goal is to conduct a realistic mock interview for the user.
 - Start by introducing yourself and asking the first question.
 - Ask only ONE question at a time.
@@ -2759,14 +2791,26 @@ const SettingsView = ({ settings, onUpdate }: { settings: Settings, onUpdate: (u
                             <h3>Prompts</h3>
                             <div className="form-grid">
                                  <div className="form-group">
-                                    <label htmlFor="resumeCheckerPrompt">Resume Checker Prompt</label>
-                                    <textarea id="resumeCheckerPrompt" value={localSettings.prompts.resumeChecker} onChange={(e) => handleNestedChange('prompts', 'resumeChecker', e.target.value)} rows={8}></textarea>
-                                    <p className="placeholder-text">Use placeholders like {"{{JOB_DESCRIPTION}}"}, {"{{RESUME_CONTENT}}"} in the prompt.</p>
+                                    <label htmlFor="resumeCheckerPrompt">Resume Checker Prompt (Read-only)</label>
+                                    <textarea 
+                                        id="resumeCheckerPrompt" 
+                                        value={localSettings.prompts.resumeChecker} 
+                                        readOnly 
+                                        rows={8}
+                                        style={{ backgroundColor: '#f5f5f5', color: '#666' }}
+                                    ></textarea>
+                                    <p className="placeholder-text">This prompt is loaded from prompts/resume-checker-prompt.txt. Edit the file to modify.</p>
                                 </div>
                                  <div className="form-group">
-                                    <label htmlFor="coverLetterPrompt">Cover Letter Prompt</label>
-                                    <textarea id="coverLetterPrompt" value={localSettings.prompts.coverLetter} onChange={(e) => handleNestedChange('prompts', 'coverLetter', e.target.value)} rows={8}></textarea>
-                                    <p className="placeholder-text">Use placeholder {"{{JSON_DATA}}"} to provide context to the AI.</p>
+                                    <label htmlFor="coverLetterPrompt">Cover Letter Prompt (Read-only)</label>
+                                    <textarea 
+                                        id="coverLetterPrompt" 
+                                        value={localSettings.prompts.coverLetter} 
+                                        readOnly 
+                                        rows={8}
+                                        style={{ backgroundColor: '#f5f5f5', color: '#666' }}
+                                    ></textarea>
+                                    <p className="placeholder-text">This prompt is loaded from prompts/cover-letter-prompt.txt. Edit the file to modify.</p>
                                 </div>
                                  <div className="form-group">
                                     <label htmlFor="interviewQuestionsPrompt">Interview Questions Prompt</label>
@@ -3073,6 +3117,9 @@ const App = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                // Load prompts from files first
+                const filePrompts = await loadPromptsFromFiles();
+                
                 // Fetch all data from API
                 const [jobsData, resumesData, contactsData, eventsData, settingsData] = await Promise.all([
                     apiService.getJobs(),
@@ -3086,7 +3133,18 @@ const App = () => {
                 setResumes(resumesData || []);
                 setCrmContacts(contactsData || []);
                 setCalendarEvents(eventsData || []);
-                setSettings(settingsData || initialSettings);
+                
+                // Merge file prompts with settings
+                const mergedSettings = {
+                    ...(settingsData || initialSettings),
+                    prompts: {
+                        ...(settingsData || initialSettings).prompts,
+                        coverLetter: filePrompts.coverLetter,
+                        resumeChecker: filePrompts.resumeChecker
+                    }
+                };
+                
+                setSettings(mergedSettings);
             } catch (error) {
                 console.error('Failed to fetch data:', error);
                 // Fallback to empty arrays if API is not available
