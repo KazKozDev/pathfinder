@@ -2070,7 +2070,6 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             } else {
                 analysisText += `🔍 **Keyword Analysis:** Not provided by AI\n\n`;
             }
-            }
             
             // Add skills analysis
             const sa = transparentAnalysis.skills_analysis || skillsAnalysis;
