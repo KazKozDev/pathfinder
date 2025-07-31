@@ -1978,7 +1978,7 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             const transparentAnalysis = resultJson.transparent_analysis || {};
             const recommendations = resultJson.recommendations || [];
             
-            // Handle old format where data is directly in resultJson
+            // Handle new format where data is in keyword_analysis and skills_analysis
             const keywordAnalysis = resultJson.keyword_analysis || {};
             const skillsAnalysis = resultJson.skills_analysis || {};
             
@@ -2042,7 +2042,25 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                 else analysisText += `Education: Not specified\n`;
                 analysisText += '\n';
             } else {
-                analysisText += `📋 **Job Requirements:** Not provided by AI\n\n`;
+                // Try to extract requirements from skills_analysis
+                const skillsReq = skillsAnalysis.required_skills || [];
+                const skillsPref = skillsAnalysis.preferred_skills || [];
+                if (skillsReq.length > 0 || skillsPref.length > 0) {
+                    analysisText += `📋 **Job Requirements:**\n`;
+                    if (skillsReq.length > 0) {
+                        analysisText += `Required: ${skillsReq.join(', ')}\n`;
+                    } else {
+                        analysisText += `Required: No required skills specified\n`;
+                    }
+                    if (skillsPref.length > 0) {
+                        analysisText += `Preferred: ${skillsPref.join(', ')}\n`;
+                    } else {
+                        analysisText += `Preferred: No preferred skills specified\n`;
+                    }
+                    analysisText += '\n';
+                } else {
+                    analysisText += `📋 **Job Requirements:** Not provided by AI\n\n`;
+                }
             }
             
             // Add resume summary
@@ -2063,7 +2081,21 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                 }
                 analysisText += '\n';
             } else {
-                analysisText += `📄 **Resume Summary:** Not provided by AI\n\n`;
+                // Try to extract summary from skills_analysis
+                const matchedRequired = skillsAnalysis.matched_required || [];
+                const unmatchedRequired = skillsAnalysis.unmatched_required || [];
+                if (matchedRequired.length > 0 || unmatchedRequired.length > 0) {
+                    analysisText += `📄 **Resume Summary:**\n`;
+                    if (matchedRequired.length > 0) {
+                        analysisText += `Matched Required Skills: ${matchedRequired.join(', ')}\n`;
+                    }
+                    if (unmatchedRequired.length > 0) {
+                        analysisText += `Missing Required Skills: ${unmatchedRequired.join(', ')}\n`;
+                    }
+                    analysisText += '\n';
+                } else {
+                    analysisText += `📄 **Resume Summary:** Not provided by AI\n\n`;
+                }
             }
             
             // Add keyword analysis
