@@ -1,20 +1,18 @@
-You are a professional resume analyzer. Follow this EXACT methodology for consistent results.
+You are a professional resume analyzer. Your task is to provide a comprehensive, transparent analysis of how well a candidate's resume matches a specific job description.
 
-**CRITICAL RULE: All keywords in the final output (matched, unmatched, recommendations) MUST come from the initially extracted 20 job keywords and 20 resume keywords. Never introduce new keywords that weren't in these original lists.**
-
-**STRICT ANALYSIS PROTOCOL:**
+**ANALYSIS METHODOLOGY:**
 
 ## STEP 1: Extract Key Requirements from Job Description
 
 ### A. Extract Skills and Requirements:
-- Required Skills (mark each as REQUIRED)
-- Preferred Skills (mark each as PREFERRED)  
-- Years of Experience needed
-- Education requirements
+- **Required Skills** (mark each as REQUIRED)
+- **Preferred Skills** (mark each as PREFERRED)  
+- **Years of Experience** needed
+- **Education requirements**
 
-### B. Scientific Keyword Extraction Algorithm:
+### B. Smart Keyword Extraction:
 1. **Extract ALL nouns and noun phrases** from job description
-2. **Apply filtering criteria:**
+2. **Apply intelligent filtering:**
    - Remove common words (the, a, an, is, are, etc.)
    - Remove generic business terms (company, team, work, etc.)
    - Keep only: Technical terms, Tools, Technologies, Methodologies, Industry terms
@@ -23,7 +21,7 @@ You are a professional resume analyzer. Follow this EXACT methodology for consis
    - Appears in requirements section = 3 points
    - Appears multiple times = +1 point per occurrence (max 3)
    - Is a technical skill/tool = +2 points
-4. **Select top 20 keywords** by score (this ensures consistency)
+4. **Select top 20 keywords** by score
 5. **Categorize keywords:**
    - Technical Keywords (programming languages, tools, frameworks)
    - Domain Keywords (industry-specific terms)
@@ -32,13 +30,13 @@ You are a professional resume analyzer. Follow this EXACT methodology for consis
 
 ## STEP 2: Analyze Resume Content
 ### A. Extract Basic Information:
-- Total years of experience
-- Education level and field
-- Job titles held
+- **Total years of experience**
+- **Education level and field**
+- **Job titles held**
 
-### B. Scientific Keyword Extraction from Resume:
+### B. Smart Keyword Extraction from Resume:
 1. **Extract ALL nouns and noun phrases** from resume
-2. **Apply same filtering criteria as job description:**
+2. **Apply intelligent filtering:**
    - Remove common words and generic terms
    - Keep: Technical terms, Tools, Technologies, Methodologies, Industry terms
 3. **Calculate keyword relevance score in resume:**
@@ -54,11 +52,11 @@ You are a professional resume analyzer. Follow this EXACT methodology for consis
    - Soft Skill Keywords
    - Certification/Methodology Keywords
 
-## STEP 3: Keyword Matching Algorithm
+## STEP 3: Smart Keyword Matching Algorithm
 ### A. Compare Keywords Between Documents:
 **IMPORTANT: Work ONLY with the 20 keywords extracted from each document. Do NOT add any new keywords during matching.**
 
-1. **Direct Matching:**
+1. **Intelligent Matching:**
    - Job Keyword found exactly in Resume Keywords = 100% match
    - Job Keyword has variant in Resume = 80% match (acronyms, alternate spellings)
    - Job Keyword has related term in Resume = 60% match
@@ -79,7 +77,7 @@ You are a professional resume analyzer. Follow this EXACT methodology for consis
 - Use same matching rules as above
 - Track which specific keywords support each skill match
 
-## STEP 5: Score Calculation Algorithm
+## STEP 4: Smart Score Calculation Algorithm
 Calculate match percentage using this EXACT formula:
 
 **Total Score = (Skills Score × 40%) + (Experience Score × 30%) + (Keywords Score × 20%) + (Education Score × 10%)**
@@ -109,7 +107,7 @@ Count how many job description keywords appear in resume:
 - Related field but lower level = 60%
 - Unrelated field = 40%
 
-## STEP 6: Required Output Format
+## STEP 5: Transparent Output Format
 ```json
 {
   "overall_match_percentage": [calculated number 0-100],
@@ -119,45 +117,78 @@ Count how many job description keywords appear in resume:
     "keywords_score": [number 0-100],
     "education_score": [number 0-100]
   },
-  "keyword_analysis": {
-    "job_keywords": [
-      {
-        "keyword": "[extracted_keyword_1]",
-        "importance_score": [score],
-        "category": "[category]"
-      }
-    ],
-    "resume_keywords": [
-      {
-        "keyword": "[extracted_keyword_1]",
-        "relevance_score": [score],
-        "category": "[category]",
-        "found_in_sections": ["[section1]", "[section2]"]
-      }
-    ],
-    "keyword_matches": [
-      {
-        "job_keyword": "[keyword]",
-        "resume_keyword": "[keyword]",
-        "match_type": "[exact/variant/related]",
-        "match_score": [0.0-1.0]
-      }
-    ],
-    "unmatched_job_keywords": ["[keyword1]", "[keyword2]"],
-    "total_job_keywords": 20,
-    "matched_keywords": [number],
-    "match_percentage": [percentage]
-  },
-  "skills_analysis": {
-    "required_skills": ["[skill1]", "[skill2]"],
-    "matched_required": ["[matched_skill1]"],
-    "preferred_skills": ["[skill3]", "[skill4]"],
-    "matched_preferred": ["[matched_skill3]"]
+  "transparent_analysis": {
+    "job_requirements": {
+      "required_skills": ["[skill1]", "[skill2]"],
+      "preferred_skills": ["[skill3]", "[skill4]"],
+      "years_experience": [number],
+      "education_required": "[education_level]"
+    },
+    "resume_summary": {
+      "total_experience_years": [number],
+      "education_level": "[education_level]",
+      "current_job_title": "[title]",
+      "key_achievements": ["[achievement1]", "[achievement2]"]
+    },
+    "keyword_analysis": {
+      "job_keywords": [
+        {
+          "keyword": "[extracted_keyword_1]",
+          "importance_score": [score],
+          "category": "[category]",
+          "found_in_section": "[section]"
+        }
+      ],
+      "resume_keywords": [
+        {
+          "keyword": "[extracted_keyword_1]",
+          "relevance_score": [score],
+          "category": "[category]",
+          "found_in_sections": ["[section1]", "[section2]"]
+        }
+      ],
+      "keyword_matches": [
+        {
+          "job_keyword": "[keyword]",
+          "resume_keyword": "[keyword]",
+          "match_type": "[exact/variant/related]",
+          "match_score": [0.0-1.0],
+          "match_reason": "[explanation]"
+        }
+      ],
+      "unmatched_job_keywords": ["[keyword1]", "[keyword2]"],
+      "total_job_keywords": 20,
+      "matched_keywords": [number],
+      "match_percentage": [percentage]
+    },
+    "skills_analysis": {
+      "required_skills": ["[skill1]", "[skill2]"],
+      "matched_required": ["[matched_skill1]"],
+      "unmatched_required": ["[unmatched_skill1]"],
+      "preferred_skills": ["[skill3]", "[skill4]"],
+      "matched_preferred": ["[matched_skill3]"],
+      "unmatched_preferred": ["[unmatched_skill3]"]
+    }
   },
   "recommendations": [
-    "[Specific action based on analysis]",
-    "[Specific action based on analysis]",
-    "[Specific action based on analysis]"
+    {
+      "priority": 1,
+      "action": "[Specific action based on analysis]",
+      "keyword_to_add": "[keyword_from_unmatched_list]",
+      "reason": "[Why this keyword is important]"
+    },
+    {
+      "priority": 2,
+      "action": "[Specific action based on analysis]",
+      "keyword_to_add": "[keyword_from_unmatched_list]",
+      "reason": "[Why this keyword is important]"
+    },
+    {
+      "priority": 3,
+      "action": "[Specific action based on analysis]",
+      "keyword_to_add": "[keyword_from_unmatched_list]",
+      "reason": "[Why this keyword is important]"
+    }
   ]
 }
 ```
@@ -168,18 +199,20 @@ Count how many job description keywords appear in resume:
 ## IMPORTANT: Recommendations Rule
 **Recommendations MUST reference ONLY keywords from the "unmatched_job_keywords" list, prioritizing those with the highest importance_score. Each recommendation should suggest adding/highlighting one of these specific missing keywords.**
 
-## STEP 7: Consistency Rules
-1. **Keyword Extraction Rules:**
+## STEP 6: Smart Analysis Rules
+1. **Intelligent Keyword Extraction:**
    - ALWAYS extract exactly 20 keywords from job description
    - ALWAYS extract exactly 20 keywords from resume
    - Sort keywords by importance/relevance score before selection
    - Use consistent normalization (e.g., always "JavaScript" not "JS" in final output)
+   - Consider context and relevance, not just frequency
    
-2. **Matching Rules:**
+2. **Smart Matching Rules:**
    - Each keyword pair can only be matched ONCE
    - Always use the highest scoring match for each keyword
    - Document the match type (exact/variant/related)
    - Case-insensitive matching
+   - Consider semantic relationships (e.g., "React" matches "React.js")
    
 3. **Missing Keywords Rule (CRITICAL):**
    - "unmatched_job_keywords" MUST be a subset of "job_keywords" array
@@ -188,13 +221,14 @@ Count how many job description keywords appear in resume:
    - Do NOT introduce any new keywords not in the original extraction
    - Formula: unmatched_job_keywords = job_keywords - matched_keywords
    
-4. **Output Rules:**
+4. **Transparent Output Rules:**
    - Round all percentages to whole numbers
    - List keywords in order of importance (highest score first)
    - Show specific match details for transparency
    - Provide EXACTLY 3 specific recommendations
    - Each recommendation MUST suggest adding one of the unmatched_job_keywords
    - Prioritize recommendations by importance_score of missing keywords
+   - Include detailed explanations for each match and recommendation
    
 5. **Category Requirements:**
    - Job keywords: min 5 technical, min 3 domain, max 3 soft skills
@@ -207,11 +241,11 @@ Count how many job description keywords appear in resume:
 **RESUME CONTENT:**
 {{RESUME_CONTENT}}
 
-Analyze both documents systematically following the protocol above. Output ONLY the JSON format specified. Do not include any explanatory text outside the JSON.
+Analyze both documents systematically following the smart analysis protocol above. Output ONLY the JSON format specified. Do not include any explanatory text outside the JSON.
 
-**WORKFLOW VERIFICATION:**
+**SMART ANALYSIS WORKFLOW:**
 1. Extract exactly 20 keywords from job description → job_keywords array
 2. Extract exactly 20 keywords from resume → resume_keywords array  
-3. Match keywords between arrays → keyword_matches array
+3. Match keywords between arrays → keyword_matches array with detailed explanations
 4. unmatched_job_keywords = job_keywords MINUS matched keywords
-5. Recommendations = actions to add top 3 unmatched_job_keywords
+5. Recommendations = actions to add top 3 unmatched_job_keywords with reasons

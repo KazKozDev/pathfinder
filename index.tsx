@@ -1924,34 +1924,138 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
         try {
             const response = await ai.models.generateContent({
                 model: "gemini-2.5-flash",
-                contents: prompt,
-                config: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: Type.OBJECT,
-                        properties: {
-                            score: {
-                                type: Type.NUMBER,
-                                description: "A numerical score from 0-100 representing how well the resume matches the job description."
-                            },
-                            missing_keywords: {
-                                type: Type.ARRAY,
-                                items: {
-                                    type: Type.STRING
-                                },
-                                description: "A list of critical keywords from the job description that are missing in the resume."
-                            }
-                        },
-                        required: ['score', 'missing_keywords']
-                    }
-                }
+                contents: prompt
             });
 
             const resultJson = JSON.parse(response.text);
+            
+            // Extract data from the new transparent format
+            const overallScore = resultJson.overall_match_percentage || 0;
+            const breakdown = resultJson.breakdown || {};
+            const transparentAnalysis = resultJson.transparent_analysis || {};
+            const recommendations = resultJson.recommendations || [];
+            
+            // Create detailed analysis text
+            let analysisText = `📊 **Overall Match: ${overallScore}%**\n\n`;
+            
+            // Add breakdown scores
+            if (breakdown.skills_score !== undefined) analysisText += `🎯 Skills Match: ${breakdown.skills_score}%\n`;
+            if (breakdown.experience_score !== undefined) analysisText += `⏰ Experience Match: ${breakdown.experience_score}%\n`;
+            if (breakdown.keywords_score !== undefined) analysisText += `🔑 Keywords Match: ${breakdown.keywords_score}%\n`;
+            if (breakdown.education_score !== undefined) analysisText += `🎓 Education Match: ${breakdown.education_score}%\n\n`;
+            
+            // Add job requirements summary
+            if (transparentAnalysis.job_requirements) {
+                const req = transparentAnalysis.job_requirements;
+                analysisText += `📋 **Job Requirements:**\n`;
+                if (req.required_skills && req.required_skills.length > 0) {
+                    analysisText += `Required: ${req.required_skills.join(', ')}\n`;
+                }
+                if (req.preferred_skills && req.preferred_skills.length > 0) {
+                    analysisText += `Preferred: ${req.preferred_skills.join(', ')}\n`;
+                }
+                if (req.years_experience) analysisText += `Experience: ${req.years_experience} years\n`;
+                if (req.education_required) analysisText += `Education: ${req.education_required}\n`;
+                analysisText += '\n';
+            }
+            
+            // Add resume summary
+            if (transparentAnalysis.resume_summary) {
+                const res = transparentAnalysis.resume_summary;
+                analysisText += `📄 **Resume Summary:**\n`;
+                if (res.total_experience_years) analysisText += `Experience: ${res.total_experience_years} years\n`;
+                if (res.education_level) analysisText += `Education: ${res.education_level}\n`;
+                if (res.current_job_title) analysisText += `Current Role: ${res.current_job_title}\n`;
+                analysisText += '\n';
+            }
+            
+            // Add keyword analysis
+            if (transparentAnalysis.keyword_analysis) {
+                const ka = transparentAnalysis.keyword_analysis;
+                analysisText += `🔍 **Keyword Analysis:**\n`;
+                analysisText += `Job Keywords: ${ka.total_job_keywords || 0}\n`;
+                analysisText += `Matched Keywords: ${ka.matched_keywords || 0}\n`;
+                analysisText += `Match Percentage: ${ka.match_percentage || 0}%\n\n`;
+                
+                // Show top job keywords
+                if (ka.job_keywords && ka.job_keywords.length > 0) {
+                    analysisText += `🏆 **Top Job Keywords:**\n`;
+                    ka.job_keywords.slice(0, 10).forEach((kw: any, i: number) => {
+                        analysisText += `${i + 1}. ${kw.keyword} (${kw.category}, score: ${kw.importance_score})\n`;
+                    });
+                    analysisText += '\n';
+                }
+                
+                // Show top resume keywords
+                if (ka.resume_keywords && ka.resume_keywords.length > 0) {
+                    analysisText += `📝 **Top Resume Keywords:**\n`;
+                    ka.resume_keywords.slice(0, 10).forEach((kw: any, i: number) => {
+                        analysisText += `${i + 1}. ${kw.keyword} (${kw.category}, score: ${kw.relevance_score})\n`;
+                    });
+                    analysisText += '\n';
+                }
+                
+                // Show keyword matches
+                if (ka.keyword_matches && ka.keyword_matches.length > 0) {
+                    analysisText += `✅ **Keyword Matches:**\n`;
+                    ka.keyword_matches.slice(0, 10).forEach((match: any, i: number) => {
+                        analysisText += `${i + 1}. "${match.job_keyword}" ↔ "${match.resume_keyword}" (${match.match_type}, ${Math.round(match.match_score * 100)}%)\n`;
+                    });
+                    analysisText += '\n';
+                }
+                
+                // Show unmatched keywords
+                if (ka.unmatched_job_keywords && ka.unmatched_job_keywords.length > 0) {
+                    analysisText += `❌ **Missing Keywords:**\n`;
+                    ka.unmatched_job_keywords.forEach((keyword: string, i: number) => {
+                        analysisText += `${i + 1}. ${keyword}\n`;
+                    });
+                    analysisText += '\n';
+                }
+            }
+            
+            // Add skills analysis
+            if (transparentAnalysis.skills_analysis) {
+                const sa = transparentAnalysis.skills_analysis;
+                analysisText += `🎯 **Skills Analysis:**\n`;
+                
+                if (sa.required_skills && sa.required_skills.length > 0) {
+                    analysisText += `Required Skills: ${sa.required_skills.join(', ')}\n`;
+                    if (sa.matched_required && sa.matched_required.length > 0) {
+                        analysisText += `✅ Matched: ${sa.matched_required.join(', ')}\n`;
+                    }
+                    if (sa.unmatched_required && sa.unmatched_required.length > 0) {
+                        analysisText += `❌ Missing: ${sa.unmatched_required.join(', ')}\n`;
+                    }
+                }
+                
+                if (sa.preferred_skills && sa.preferred_skills.length > 0) {
+                    analysisText += `Preferred Skills: ${sa.preferred_skills.join(', ')}\n`;
+                    if (sa.matched_preferred && sa.matched_preferred.length > 0) {
+                        analysisText += `✅ Matched: ${sa.matched_preferred.join(', ')}\n`;
+                    }
+                    if (sa.unmatched_preferred && sa.unmatched_preferred.length > 0) {
+                        analysisText += `❌ Missing: ${sa.unmatched_preferred.join(', ')}\n`;
+                    }
+                }
+                analysisText += '\n';
+            }
+            
+            // Add recommendations
+            if (recommendations && recommendations.length > 0) {
+                analysisText += `💡 **Recommendations:**\n`;
+                recommendations.forEach((rec: any, i: number) => {
+                    analysisText += `${i + 1}. **${rec.action}**\n`;
+                    if (rec.keyword_to_add) analysisText += `   Add keyword: "${rec.keyword_to_add}"\n`;
+                    if (rec.reason) analysisText += `   Reason: ${rec.reason}\n`;
+                    analysisText += '\n';
+                });
+            }
+            
             updateCurrentToolState({
                 resumeCheckResult: {
-                    score: resultJson.score || 0,
-                    keywords: resultJson.missing_keywords || []
+                    score: overallScore,
+                    keywords: [analysisText]
                 }
             });
 
