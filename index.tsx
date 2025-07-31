@@ -248,68 +248,29 @@ Your analysis MUST be based exclusively on the provided job description and resu
 **RESUME CONTENT:**
 {{RESUME_CONTENT}}
 ---`,
-        coverLetter: `You are a professional career coach tasked with writing a compelling cover letter.
+        coverLetter: `You are a professional cover letter writer. Your task is to create a compelling, personalized cover letter based on the provided candidate and job information.
 
-FIRST, you must validate if you have enough information. Check if the provided resume has content in the 'summary' and 'experience' sections, and if the job description has content beyond just a title.
-- If information is MISSING, your entire response MUST be a single line: "INSUFFICIENT_DATA: [Explain what is missing, e.g., 'The resume summary is empty.' or 'The job description is too short.']"
-- If all information is present, proceed to generate the cover letter.
+**INSTRUCTIONS:**
+- Write a professional cover letter in a formal business tone
+- Use the candidate's name, experience, and qualifications from their resume
+- Reference specific requirements from the job description
+- Keep it concise (300-400 words)
+- Include a clear opening, body paragraphs highlighting relevant experience, and a strong closing
+- Address it to the hiring manager or specific contact if available
+- Use the current date provided
 
-**PRIMARY INSTRUCTIONS:**
-Generate an effective cover letter by following the structure and guidelines below precisely.
-You MUST use the provided JSON data about the candidate and the job. Do not use any other information.
-
----
-**STRUCTURE & GUIDELINES TO FOLLOW**
-
-**Structure the letter as follows:**
-1.  **Introduction:**
-    *   Briefly introduce yourself using the candidate's name and qualification.
-    *   State the position and why you are interested, using the provided job details.
-    *   Mention the source of the vacancy.
-
-2.  **Main body:**
-    *   From the candidate's full resume content, describe relevant skills and experience that match the job description.
-    *   Explain why the candidate is a good fit for the role and the company.
-    *   From the candidate's resume, highlight unique qualities that distinguish them.
-    *   Incorporate key words from the job description naturally.
-
-3.  **Conclusion:**
-    *   Express readiness for an interview or further discussion.
-    *   Thank the recipient for their consideration.
-    *   Mention the attached resume.
-
-**MANDATORY FORMATTING:**
-*   Keep the letter to one page (3-4 paragraphs).
-*   Use a formal, professional tone. Avoid slang.
-*   The final output MUST be displayed in this exact format:
-    [Candidate Name]
-    [Candidate Contact Info (Email, Phone)]
-    [Date]
-
-    [Recipient Name]
-    [Recipient Role]
-    [Company Name]
-    [Company Address]
-
-    Dear [Recipient Name],
-
-    [Introduction paragraph]
-
-    [Main body paragraph(s)]
-
-    [Conclusion paragraph]
-
-    Sincerely,
-    [Candidate Name]
-
-    Attachment: Resume
----
-**DATA TO USE (JSON FORMAT):**
-
+**CANDIDATE AND JOB DATA:**
 {{JSON_DATA}}
----
 
-GENERATE THE COVER LETTER NOW.`,
+**REQUIREMENTS:**
+- Start with a professional greeting
+- Explain why you're interested in this specific position and company
+- Connect your experience to the job requirements
+- Show enthusiasm and fit for the role
+- End with a call to action requesting an interview
+- Use proper business letter format
+
+Please generate a complete, ready-to-use cover letter.`,
         interviewQuestions: `You are an AI Interviewer. Your goal is to conduct a realistic mock interview for the user.
 - Start by introducing yourself and asking the first question.
 - Ask only ONE question at a time.
@@ -2010,35 +1971,13 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             currentDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
         };
 
-        // Create a proper cover letter generation prompt
-        const coverLetterPrompt = `You are a professional cover letter writer. Your task is to create a compelling, personalized cover letter based on the provided candidate and job information.
-
-**INSTRUCTIONS:**
-- Write a professional cover letter in a formal business tone
-- Use the candidate's name, experience, and qualifications from their resume
-- Reference specific requirements from the job description
-- Keep it concise (300-400 words)
-- Include a clear opening, body paragraphs highlighting relevant experience, and a strong closing
-- Address it to the hiring manager or specific contact if available
-- Use the current date provided
-
-**CANDIDATE AND JOB DATA:**
-${JSON.stringify(dataForPrompt, null, 2)}
-
-**REQUIREMENTS:**
-- Start with a professional greeting
-- Explain why you're interested in this specific position and company
-- Connect your experience to the job requirements
-- Show enthusiasm and fit for the role
-- End with a call to action requesting an interview
-- Use proper business letter format
-
-Please generate a complete, ready-to-use cover letter.`;
+        const promptTemplate = settings.prompts.coverLetter;
+        const prompt = promptTemplate.replace('{{JSON_DATA}}', JSON.stringify(dataForPrompt, null, 2));
 
         try {
             const response = await ai.models.generateContent({ 
                 model: "gemini-2.5-flash", 
-                contents: coverLetterPrompt 
+                contents: prompt 
             });
             
             // Check if the response is valid
