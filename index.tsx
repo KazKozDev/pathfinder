@@ -1961,25 +1961,31 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
     const handleGenerateLetter = async () => {
         const job = jobs.find(j => j.id === selectedJobId);
         const resume = resumes.find(r => r.id === selectedResumeId);
+        
         if (!job || !resume) {
              updateCurrentToolState({ resultText: "Please select a job and a resume to generate a cover letter." });
             return;
         }
+        
+        // Validate that we have the necessary data
+        if (!job.description || job.description.trim().length < 50) {
+            updateCurrentToolState({ resultText: "Error: Job description is too short or missing. Please select a job with a detailed description." });
+            return;
+        }
+        
+        if (!resume.summary || resume.summary.trim() === '') {
+            updateCurrentToolState({ resultText: "Error: Resume summary is missing. Please add a summary to your resume first." });
+            return;
+        }
+        
+        if (!resume.experience || resume.experience.length === 0) {
+            updateCurrentToolState({ resultText: "Error: Resume has no work experience. Please add work experience to your resume first." });
+            return;
+        }
+        
         setIsLoading(true);
         updateCurrentToolState({ resultText: '' });
         
-        const isDataSufficient = resume.summary.trim() !== '' && resume.experience.length > 0 && job.description.trim().length > 50;
-        if (!isDataSufficient) {
-             let errorMsg = "Could not generate: INSUFFICIENT_DATA: ";
-             if(resume.summary.trim() === '') errorMsg += "Resume summary is empty. ";
-             if(resume.experience.length === 0) errorMsg += "Resume has no work experience. ";
-             if(job.description.trim().length <= 50) errorMsg += "Job description is too short. ";
-             updateCurrentToolState({ resultText: errorMsg.trim() });
-             setIsLoading(false);
-             return;
-        }
-        
-        const promptTemplate = settings.prompts.coverLetter;
         const contact = job.contactIds?.[0] ? crmContacts.find(c => c.id === job.contactIds[0]) : null;
 
         const dataForPrompt = {
@@ -2004,14 +2010,42 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             currentDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
         };
 
-        const prompt = promptTemplate.replace('{{JSON_DATA}}', JSON.stringify(dataForPrompt, null, 2));
+        // Create a proper cover letter generation prompt
+        const coverLetterPrompt = `You are a professional cover letter writer. Your task is to create a compelling, personalized cover letter based on the provided candidate and job information.
+
+**INSTRUCTIONS:**
+- Write a professional cover letter in a formal business tone
+- Use the candidate's name, experience, and qualifications from their resume
+- Reference specific requirements from the job description
+- Keep it concise (300-400 words)
+- Include a clear opening, body paragraphs highlighting relevant experience, and a strong closing
+- Address it to the hiring manager or specific contact if available
+- Use the current date provided
+
+**CANDIDATE AND JOB DATA:**
+${JSON.stringify(dataForPrompt, null, 2)}
+
+**REQUIREMENTS:**
+- Start with a professional greeting
+- Explain why you're interested in this specific position and company
+- Connect your experience to the job requirements
+- Show enthusiasm and fit for the role
+- End with a call to action requesting an interview
+- Use proper business letter format
+
+Please generate a complete, ready-to-use cover letter.`;
 
         try {
-            const response = await ai.models.generateContent({ model: "gemini-2.5-flash", contents: prompt });
-            if (response.text.startsWith('INSUFFICIENT_DATA:')) {
-                 updateCurrentToolState({ resultText: `Could not generate: ${response.text}` });
+            const response = await ai.models.generateContent({ 
+                model: "gemini-2.5-flash", 
+                contents: coverLetterPrompt 
+            });
+            
+            // Check if the response is valid
+            if (response.text && response.text.trim().length > 0) {
+                updateCurrentToolState({ resultText: response.text });
             } else {
-                 updateCurrentToolState({ resultText: response.text });
+                updateCurrentToolState({ resultText: "Error: Generated cover letter is empty. Please try again." });
             }
         } catch (error) {
             console.error("Cover letter generation failed:", error);
