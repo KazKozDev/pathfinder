@@ -1798,14 +1798,14 @@ const VoiceInterviewTool = ({ jobs, resumes, settings }: { jobs: Job[], resumes:
                 <h3>Mock Interview</h3>
                 <p className="placeholder-text">Practice your interview skills with an AI interviewer. Your conversation will be voice-based.</p>
                 <div className="generator-controls vertical">
-                    <select value={selectedJobId ?? ''} onChange={e => setSelectedJobId(Number(e.target.value))} disabled={jobs.length === 0} aria-label="Select job for interview prep">
-                        <option value="" disabled>Select a job...</option>
-                        {jobs.filter(j => j.description).map(job => <option key={job.id} value={job.id}>{job.title} at {job.company}</option>)}
-                    </select>
-                    <select value={selectedResumeId ?? ''} onChange={e => setSelectedResumeId(Number(e.target.value))} disabled={resumes.length === 0} aria-label="Select resume for interview prep">
-                       <option value="" disabled>Select a resume...</option>
-                       {resumes.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
-                   </select>
+                                                <select value={selectedJobId ?? ''} onChange={e => updateCurrentToolState({ selectedJobId: Number(e.target.value) })} disabled={jobs.length === 0} aria-label="Select job for interview prep">
+                                <option value="" disabled>Select a job...</option>
+                                {jobs.filter(j => j.description).map(job => <option key={job.id} value={job.id}>{job.title} at {job.company}</option>)}
+                            </select>
+                            <select value={selectedResumeId ?? ''} onChange={e => updateCurrentToolState({ selectedResumeId: Number(e.target.value) })} disabled={resumes.length === 0} aria-label="Select resume for interview prep">
+                                <option value="" disabled>Select a resume...</option>
+                                {resumes.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                            </select>
                    <select value={selectedVoiceURI} onChange={e => setSelectedVoiceURI(e.target.value)} disabled={voices.length === 0} aria-label="Select AI interviewer voice">
                        <option value="" disabled>Select a voice...</option>
                        {voices.map(v => <option key={v.voiceURI} value={v.voiceURI}>{v.name} ({v.lang})</option>)}
@@ -1853,32 +1853,63 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
     type ToolTab = 'Interview' | 'Resume Checker' | 'Cover Letter' | 'Deep Research' | 'General Assistant';
     const [activeTool, setActiveTool] = useState<ToolTab>('Resume Checker');
 
-    const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
-    const [selectedResumeId, setSelectedResumeId] = useState<number | null>(null);
+    // State management for each tool tab
+    const [toolStates, setToolStates] = useState<{
+        [key in ToolTab]: {
+            selectedJobId: number | null;
+            selectedResumeId: number | null;
+            resultText: string;
+            resumeCheckResult: { score: number; keywords: string[]; } | null;
+        }
+    }>({
+        'Resume Checker': { selectedJobId: null, selectedResumeId: null, resultText: '', resumeCheckResult: null },
+        'Cover Letter': { selectedJobId: null, selectedResumeId: null, resultText: '', resumeCheckResult: null },
+        'Interview': { selectedJobId: null, selectedResumeId: null, resultText: '', resumeCheckResult: null },
+        'Deep Research': { selectedJobId: null, selectedResumeId: null, resultText: '', resumeCheckResult: null },
+        'General Assistant': { selectedJobId: null, selectedResumeId: null, resultText: '', resumeCheckResult: null }
+    });
+
     const [isLoading, setIsLoading] = useState(false);
-    const [resultText, setResultText] = useState('');
-    
-    type ResumeCheckResult = { score: number; keywords: string[]; };
-    const [resumeCheckResult, setResumeCheckResult] = useState<ResumeCheckResult | null>(null);
 
-    // Effect to pre-select job/resume when tool changes
+    // Helper functions to get and set current tool state
+    const getCurrentToolState = () => toolStates[activeTool];
+    const updateCurrentToolState = (updates: Partial<typeof toolStates[ToolTab]>) => {
+        setToolStates(prev => ({
+            ...prev,
+            [activeTool]: { ...prev[activeTool], ...updates }
+        }));
+    };
+
+    // Extract current state for easier access
+    const currentState = getCurrentToolState();
+    const selectedJobId = currentState.selectedJobId;
+    const selectedResumeId = currentState.selectedResumeId;
+    const resultText = currentState.resultText;
+    const resumeCheckResult = currentState.resumeCheckResult;
+
+    // Effect to pre-select job/resume when tool changes (only if not already set)
     useEffect(() => {
-        const firstJobWithDesc = jobs.find(j => j.description);
-        if (firstJobWithDesc) setSelectedJobId(firstJobWithDesc.id);
-        else if (jobs.length > 0) setSelectedJobId(jobs[0].id);
+        const currentState = getCurrentToolState();
+        if (currentState.selectedJobId === null) {
+            const firstJobWithDesc = jobs.find(j => j.description);
+            if (firstJobWithDesc) updateCurrentToolState({ selectedJobId: firstJobWithDesc.id });
+            else if (jobs.length > 0) updateCurrentToolState({ selectedJobId: jobs[0].id });
+        }
 
-        if (resumes.length > 0) setSelectedResumeId(resumes[0].id);
+        if (currentState.selectedResumeId === null && resumes.length > 0) {
+            updateCurrentToolState({ selectedResumeId: resumes[0].id });
+        }
     }, [activeTool, jobs, resumes]);
     
     const handleCheckResume = async () => {
         const job = jobs.find(j => j.id === selectedJobId);
         const resume = resumes.find(r => r.id === selectedResumeId);
         if (!job || !resume || !job.description) {
-            setResumeCheckResult({ score: 0, keywords: ["Please select a job (with a description) and a resume."] });
+            updateCurrentToolState({ resumeCheckResult: { score: 0, keywords: ["Please select a job (with a description) and a resume."] } });
             return;
         }
         setIsLoading(true);
-        setResumeCheckResult(null);
+        updateCurrentToolState({ resumeCheckResult: null });
 
         const promptTemplate = settings.prompts.resumeChecker;
         const prompt = promptTemplate
@@ -1912,14 +1943,16 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             });
 
             const resultJson = JSON.parse(response.text);
-            setResumeCheckResult({
-                score: resultJson.score || 0,
-                keywords: resultJson.missing_keywords || []
+            updateCurrentToolState({
+                resumeCheckResult: {
+                    score: resultJson.score || 0,
+                    keywords: resultJson.missing_keywords || []
+                }
             });
 
         } catch (error) {
             console.error("Resume check failed:", error);
-            setResumeCheckResult({ score: 0, keywords: ["Error: Could not perform analysis. Please try again."] });
+            updateCurrentToolState({ resumeCheckResult: { score: 0, keywords: ["Error: Could not perform analysis. Please try again."] } });
         } finally {
             setIsLoading(false);
         }
@@ -1929,11 +1962,11 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
         const job = jobs.find(j => j.id === selectedJobId);
         const resume = resumes.find(r => r.id === selectedResumeId);
         if (!job || !resume) {
-             setResultText("Please select a job and a resume to generate a cover letter.");
+             updateCurrentToolState({ resultText: "Please select a job and a resume to generate a cover letter." });
             return;
         }
         setIsLoading(true);
-        setResultText('');
+        updateCurrentToolState({ resultText: '' });
         
         const isDataSufficient = resume.summary.trim() !== '' && resume.experience.length > 0 && job.description.trim().length > 50;
         if (!isDataSufficient) {
@@ -1941,7 +1974,7 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
              if(resume.summary.trim() === '') errorMsg += "Resume summary is empty. ";
              if(resume.experience.length === 0) errorMsg += "Resume has no work experience. ";
              if(job.description.trim().length <= 50) errorMsg += "Job description is too short. ";
-             setResultText(errorMsg.trim());
+             updateCurrentToolState({ resultText: errorMsg.trim() });
              setIsLoading(false);
              return;
         }
@@ -1976,13 +2009,13 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
         try {
             const response = await ai.models.generateContent({ model: "gemini-2.5-flash", contents: prompt });
             if (response.text.startsWith('INSUFFICIENT_DATA:')) {
-                 setResultText(`Could not generate: ${response.text}`);
+                 updateCurrentToolState({ resultText: `Could not generate: ${response.text}` });
             } else {
-                 setResultText(response.text);
+                 updateCurrentToolState({ resultText: response.text });
             }
         } catch (error) {
             console.error("Cover letter generation failed:", error);
-            setResultText("Error: Could not generate cover letter. Please try again.");
+            updateCurrentToolState({ resultText: "Error: Could not generate cover letter. Please try again." });
         } finally {
             setIsLoading(false);
         }
@@ -1991,11 +2024,11 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
     const handleDeepResearch = async () => {
         const job = jobs.find(j => j.id === selectedJobId);
         if (!job) {
-            setResultText("Please select a job to research.");
+            updateCurrentToolState({ resultText: "Please select a job to research." });
             return;
         }
         setIsLoading(true);
-        setResultText('');
+        updateCurrentToolState({ resultText: '' });
         const prompt = `You are a professional career research analyst. Your ONLY task is to use Google Search to find real-time, public information. **DO NOT use your internal knowledge or make assumptions.**
 
 Perform a deep, internet-based search to compile a concise research report for a candidate applying for the role of "${job.title}" at "${job.company}".
@@ -2032,10 +2065,10 @@ ${job.description || 'No detailed description provided.'}
                     tools: [{ googleSearch: {} }],
                 },
             });
-            setResultText(response.text);
+            updateCurrentToolState({ resultText: response.text });
         } catch (error) {
             console.error("Deep research generation failed:", error);
-            setResultText("Error: Could not generate the research report. The topic may be restricted or another error occurred. Please try again.");
+            updateCurrentToolState({ resultText: "Error: Could not generate the research report. The topic may be restricted or another error occurred. Please try again." });
         } finally {
             setIsLoading(false);
         }
@@ -2073,11 +2106,11 @@ ${job.description || 'No detailed description provided.'}
                         <h3>Resume Checker</h3>
                         <p className="placeholder-text">Get an ATS-friendly score and find missing keywords.</p>
                         <div className="generator-controls">
-                            <select value={selectedJobId ?? ''} onChange={e => setSelectedJobId(Number(e.target.value))} disabled={jobs.length === 0} aria-label="Select job for resume check">
+                            <select value={selectedJobId ?? ''} onChange={e => updateCurrentToolState({ selectedJobId: Number(e.target.value) })} disabled={jobs.length === 0} aria-label="Select job for resume check">
                                 <option value="" disabled>Select a job...</option>
                                 {jobs.filter(j => j.description).map(job => <option key={job.id} value={job.id}>{job.title} at {job.company}</option>)}
                             </select>
-                             <select value={selectedResumeId ?? ''} onChange={e => setSelectedResumeId(Number(e.target.value))} disabled={resumes.length === 0} aria-label="Select resume for resume check">
+                             <select value={selectedResumeId ?? ''} onChange={e => updateCurrentToolState({ selectedResumeId: Number(e.target.value) })} disabled={resumes.length === 0} aria-label="Select resume for resume check">
                                 <option value="" disabled>Select a resume...</option>
                                 {resumes.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
                             </select>
@@ -2116,11 +2149,11 @@ ${job.description || 'No detailed description provided.'}
                         <h3>Cover Letter Writer</h3>
                         <p className="placeholder-text">Generate a tailored cover letter based on a job and resume.</p>
                         <div className="generator-controls">
-                            <select value={selectedJobId ?? ''} onChange={e => setSelectedJobId(Number(e.target.value))} disabled={jobs.length === 0} aria-label="Select job for cover letter">
+                                                        <select value={selectedJobId ?? ''} onChange={e => updateCurrentToolState({ selectedJobId: Number(e.target.value) })} disabled={jobs.length === 0} aria-label="Select job for cover letter">
                                 <option value="" disabled>Select a job...</option>
                                 {jobs.filter(j => j.description).map(job => <option key={job.id} value={job.id}>{job.title} at {job.company}</option>)}
                             </select>
-                             <select value={selectedResumeId ?? ''} onChange={e => setSelectedResumeId(Number(e.target.value))} disabled={resumes.length === 0} aria-label="Select resume for cover letter">
+                            <select value={selectedResumeId ?? ''} onChange={e => updateCurrentToolState({ selectedResumeId: Number(e.target.value) })} disabled={resumes.length === 0} aria-label="Select resume for cover letter">
                                 <option value="" disabled>Select a resume...</option>
                                 {resumes.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
                             </select>
@@ -2141,7 +2174,7 @@ ${job.description || 'No detailed description provided.'}
                         <h3>Deep Research</h3>
                         <p className="placeholder-text">Get a detailed, internet-powered report on a company and role.</p>
                         <div className="generator-controls">
-                            <select value={selectedJobId ?? ''} onChange={e => setSelectedJobId(Number(e.target.value))} disabled={jobs.length === 0} aria-label="Select job for deep research">
+                            <select value={selectedJobId ?? ''} onChange={e => updateCurrentToolState({ selectedJobId: Number(e.target.value) })} disabled={jobs.length === 0} aria-label="Select job for deep research">
                                 <option value="" disabled>Select a job...</option>
                                 {jobs.map(job => <option key={job.id} value={job.id}>{job.title} at {job.company}</option>)}
                             </select>
@@ -2170,8 +2203,6 @@ ${job.description || 'No detailed description provided.'}
                      {(['Resume Checker', 'Cover Letter', 'Interview', 'Deep Research', 'General Assistant'] as ToolTab[]).map(toolName => (
                         <button key={toolName} onClick={() => {
                             setActiveTool(toolName);
-                            setResultText('');
-                            setResumeCheckResult(null);
                         }} className={activeTool === toolName ? 'active' : ''}>{toolName}</button>
                     ))}
                 </div>
