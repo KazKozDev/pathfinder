@@ -1958,6 +1958,14 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             let resultJson;
             try {
                 resultJson = JSON.parse(responseText);
+                
+                // Debug: Log JSON structure
+                console.log('=== DEBUG: Parsed JSON Structure ===');
+                console.log('Keys in resultJson:', Object.keys(resultJson));
+                console.log('transparent_analysis keys:', resultJson.transparent_analysis ? Object.keys(resultJson.transparent_analysis) : 'undefined');
+                console.log('keyword_analysis keys:', resultJson.keyword_analysis ? Object.keys(resultJson.keyword_analysis) : 'undefined');
+                console.log('=== END DEBUG ===');
+                
             } catch (parseError) {
                 console.error("JSON parse error:", parseError);
                 console.error("Response text:", responseText);
