@@ -1921,6 +1921,15 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             .replace('{{JOB_DESCRIPTION}}', job.description)
             .replace('{{RESUME_CONTENT}}', getResumeAsText(resume));
 
+        // Debug: Log what we're sending to AI
+        console.log('=== DEBUG: Resume Checker Input ===');
+        console.log('Job Description Length:', job.description.length);
+        console.log('Job Description Preview:', job.description.substring(0, 200) + '...');
+        console.log('Resume Content Length:', getResumeAsText(resume).length);
+        console.log('Resume Content Preview:', getResumeAsText(resume).substring(0, 200) + '...');
+        console.log('Full Prompt Length:', prompt.length);
+        console.log('=== END DEBUG ===');
+
         try {
             const response = await ai.models.generateContent({
                 model: "gemini-2.5-flash",
@@ -1929,6 +1938,12 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
 
             // Clean the response text to extract JSON
             let responseText = response.text;
+            
+            // Debug: Log AI response
+            console.log('=== DEBUG: AI Response ===');
+            console.log('Raw Response Length:', responseText.length);
+            console.log('Raw Response Preview:', responseText.substring(0, 500) + '...');
+            console.log('=== END DEBUG ===');
             
             // Remove markdown code blocks if present
             if (responseText.includes('```json')) {
