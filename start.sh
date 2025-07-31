@@ -39,10 +39,6 @@ start_backend() {
     echo "🔧 Starting backend server..."
     cd server
     
-    # Clean install and rebuild for current Node.js version
-    echo "📦 Installing dependencies..."
-    npm install --silent
-    
     echo "🔧 Rebuilding native modules for current Node.js version..."
     npm rebuild better-sqlite3 --silent
     
@@ -56,7 +52,6 @@ start_backend() {
 # Function to start frontend server
 start_frontend() {
     echo "🎨 Starting frontend server..."
-    npm install --silent
     npm run dev &
     FRONTEND_PID=$!
     echo "✅ Frontend server started (PID: $FRONTEND_PID)"
@@ -128,6 +123,16 @@ echo "🔍 Checking Node.js version..."
 NODE_VERSION=$(node --version)
 echo "✅ Node.js version: $NODE_VERSION"
 
+# Install dependencies
+echo "📦 Installing dependencies..."
+echo "📦 Installing frontend dependencies..."
+npm install --silent
+
+echo "📦 Installing backend dependencies..."
+cd server
+npm install --silent
+cd ..
+
 # Check and clean ports
 echo "🧹 Checking and cleaning ports..."
 kill_port 3001  # Backend port
@@ -135,7 +140,6 @@ kill_port 5173  # Frontend port
 kill_port 5174  # Alternative frontend port
 
 echo ""
-echo "📦 Installing dependencies..."
 
 # Start servers
 start_backend
