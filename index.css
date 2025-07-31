@@ -723,6 +723,90 @@ button {
     font-weight: 700;
 }
 
+/* Resume Analysis Content Styling */
+.resume-analysis-content {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.resume-analysis-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.resume-analysis-content::-webkit-scrollbar-track {
+    background: var(--background-tertiary);
+    border-radius: 3px;
+}
+
+.resume-analysis-content::-webkit-scrollbar-thumb {
+    background: var(--card-border);
+    border-radius: 3px;
+}
+
+.resume-analysis-content::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+.analysis-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--card-border);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.analysis-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.analysis-section h1,
+.analysis-section h2,
+.analysis-section h3,
+.analysis-section h4 {
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.analysis-section h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.analysis-section h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+}
+
+.analysis-section h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.analysis-section p {
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.analysis-section strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.analysis-section ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.analysis-section li {
+    margin-bottom: 0.25rem;
+    color: var(--text-secondary);
+}
+
 /* General Assistant Tool (replaces .chat-view) */
 .general-assistant-tool {
   display: flex; flex-direction: column;

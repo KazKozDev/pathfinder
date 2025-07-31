@@ -2357,28 +2357,18 @@ ${job.description || 'No detailed description provided.'}
                                 {isLoading ? <div className="spinner-small"></div> : 'Check'}
                             </button>
                         </div>
-                        <div className="resume-checker-results">
-                            <div className="score-container">
-                                {isLoading && <div className="loading-indicator"><span>Analyzing...</span></div>}
-                                {resumeCheckResult && <ScoreCircle score={resumeCheckResult.score} />}
-                                {!isLoading && !resumeCheckResult && <p className="placeholder-text">Score will appear here.</p>}
-                            </div>
-                            <div className="keywords-container">
-                                <h4>Missing Keywords</h4>
-                                <div className="ai-result-box">
-                                     {isLoading && <p className="placeholder-text">Checking for keywords...</p>}
-                                     {resumeCheckResult && (
-                                         resumeCheckResult.keywords.length > 0 ? (
-                                             <ul className="missing-keywords-list">
-                                                 {resumeCheckResult.keywords.map((keyword, index) => <li key={index}>{keyword}</li>)}
-                                             </ul>
-                                         ) : (
-                                             <p className="placeholder-text">Great match! No significant keywords seem to be missing.</p>
-                                         )
-                                     )}
-                                     {!isLoading && !resumeCheckResult && <p className="placeholder-text">Suggestions will appear here.</p>}
+                        <div className="ai-result-box large">
+                            {isLoading && <div className="loading-indicator"><span>AI is analyzing your resume...</span></div>}
+                            {resumeCheckResult && resumeCheckResult.keywords.length > 0 && (
+                                <div className="resume-analysis-content">
+                                    {resumeCheckResult.keywords.map((keyword, index) => (
+                                        <div key={index} className="analysis-section">
+                                            {keyword}
+                                        </div>
+                                    ))}
                                 </div>
-                            </div>
+                            )}
+                            {!isLoading && !resumeCheckResult && <p className="placeholder-text">Your resume analysis will appear here.</p>}
                         </div>
                     </div>
                 );
