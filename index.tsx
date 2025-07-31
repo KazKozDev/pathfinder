@@ -1971,10 +1971,10 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             
             // Overall score with visual indicator
             const getScoreColor = (score: number) => {
-                if (score >= 80) return '🟢';
-                if (score >= 60) return '🟡';
-                if (score >= 40) return '🟠';
-                return '🔴';
+                if (score >= 80) return '●';
+                if (score >= 60) return '●';
+                if (score >= 40) return '●';
+                return '●';
             };
             
             analysisText += `## Overall Match: ${getScoreColor(overallScore)} ${overallScore}%\n\n`;
@@ -1996,20 +1996,20 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             
             // Add quick summary
             if (overallScore >= 80) {
-                analysisText += `🎉 **Excellent Match!** Your resume strongly aligns with this position.\n\n`;
+                analysisText += `✓ **Excellent Match!** Your resume strongly aligns with this position.\n\n`;
             } else if (overallScore >= 60) {
-                analysisText += `👍 **Good Match** Your resume has solid alignment with some room for improvement.\n\n`;
+                analysisText += `✓ **Good Match** Your resume has solid alignment with some room for improvement.\n\n`;
             } else if (overallScore >= 40) {
-                analysisText += `⚠️ **Moderate Match** Your resume needs some adjustments to better align with this role.\n\n`;
+                analysisText += `⚠ **Moderate Match** Your resume needs some adjustments to better align with this role.\n\n`;
             } else {
-                analysisText += `❌ **Poor Match** Your resume requires significant updates to align with this position.\n\n`;
+                analysisText += `✗ **Poor Match** Your resume requires significant updates to align with this position.\n\n`;
             }
             
             // Add job requirements summary
             const jobReq = transparentAnalysis.job_requirements || resultJson.job_requirements;
             if (jobReq && Object.keys(jobReq).length > 0) {
                 const req = jobReq;
-                analysisText += `📋 **Job Requirements:**\n`;
+                analysisText += `**Job Requirements:**\n`;
                 if (req.required_skills && req.required_skills.length > 0) {
                     analysisText += `Required: ${req.required_skills.join(', ')}\n`;
                 } else {
@@ -2030,7 +2030,7 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                 const skillsReq = skillsAnalysis.required_skills || [];
                 const skillsPref = skillsAnalysis.preferred_skills || [];
                 if (skillsReq.length > 0 || skillsPref.length > 0) {
-                    analysisText += `📋 **Job Requirements:**\n`;
+                    analysisText += `**Job Requirements:**\n`;
                     if (skillsReq.length > 0) {
                         analysisText += `Required: ${skillsReq.join(', ')}\n`;
                     } else {
@@ -2043,7 +2043,7 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                     }
                     analysisText += '\n';
                 } else {
-                    analysisText += `📋 **Job Requirements:** Not provided by AI\n\n`;
+                    analysisText += `**Job Requirements:** Not provided by AI\n\n`;
                 }
             }
             
@@ -2051,7 +2051,7 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             const resumeSum = transparentAnalysis.resume_summary || resultJson.resume_summary;
             if (resumeSum && Object.keys(resumeSum).length > 0) {
                 const res = resumeSum;
-                analysisText += `📄 **Resume Summary:**\n`;
+                analysisText += `**Resume Summary:**\n`;
                 if (res.total_experience_years) analysisText += `Experience: ${res.total_experience_years} years\n`;
                 else analysisText += `Experience: Not specified\n`;
                 if (res.education_level) analysisText += `Education: ${res.education_level}\n`;
@@ -2069,7 +2069,7 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                 const matchedRequired = skillsAnalysis.matched_required || [];
                 const unmatchedRequired = skillsAnalysis.unmatched_required || [];
                 if (matchedRequired.length > 0 || unmatchedRequired.length > 0) {
-                    analysisText += `📄 **Resume Summary:**\n`;
+                    analysisText += `**Resume Summary:**\n`;
                     if (matchedRequired.length > 0) {
                         analysisText += `Matched Required Skills: ${matchedRequired.join(', ')}\n`;
                     }
@@ -2078,7 +2078,7 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                     }
                     analysisText += '\n';
                 } else {
-                    analysisText += `📄 **Resume Summary:** Not provided by AI\n\n`;
+                    analysisText += `**Resume Summary:** Not provided by AI\n\n`;
                 }
             }
             
@@ -2092,50 +2092,50 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                 
                 // Show top job keywords
                 if (ka.job_keywords && ka.job_keywords.length > 0) {
-                    analysisText += `## 🏆 Most Important Job Requirements\n\n`;
+                    analysisText += `## Most Important Job Requirements\n\n`;
                     ka.job_keywords.slice(0, 10).forEach((kw: any, i: number) => {
-                        const importance = kw.importance_score >= 7 ? '🔥' : kw.importance_score >= 5 ? '⚡' : '📌';
+                        const importance = kw.importance_score >= 7 ? '●' : kw.importance_score >= 5 ? '○' : '·';
                         analysisText += `${importance} **${kw.keyword}** (${kw.category})\n`;
                     });
                     analysisText += '\n';
                 } else {
-                    analysisText += `## 🏆 Most Important Job Requirements\n*Not provided by AI*\n\n`;
+                    analysisText += `## Most Important Job Requirements\n*Not provided by AI*\n\n`;
                 }
                 
                 // Show top resume keywords
                 if (ka.resume_keywords && ka.resume_keywords.length > 0) {
-                    analysisText += `## 📝 Your Resume Highlights\n\n`;
+                    analysisText += `## Your Resume Highlights\n\n`;
                     ka.resume_keywords.slice(0, 10).forEach((kw: any, i: number) => {
-                        const strength = kw.relevance_score >= 12 ? '💪' : kw.relevance_score >= 8 ? '✅' : '📋';
+                        const strength = kw.relevance_score >= 12 ? '●' : kw.relevance_score >= 8 ? '○' : '·';
                         analysisText += `${strength} **${kw.keyword}** (${kw.category})\n`;
                     });
                     analysisText += '\n';
                 } else {
-                    analysisText += `## 📝 Your Resume Highlights\n*Not provided by AI*\n\n`;
+                    analysisText += `## Your Resume Highlights\n*Not provided by AI*\n\n`;
                 }
                 
                 // Show keyword matches
                 if (ka.keyword_matches && ka.keyword_matches.length > 0) {
-                    analysisText += `## ✅ Strong Matches\n\n`;
+                    analysisText += `## Strong Matches\n\n`;
                     ka.keyword_matches.slice(0, 10).forEach((match: any, i: number) => {
-                        const matchIcon = match.match_score >= 0.8 ? '🎯' : match.match_score >= 0.6 ? '✅' : '🔄';
+                        const matchIcon = match.match_score >= 0.8 ? '●' : match.match_score >= 0.6 ? '○' : '·';
                         analysisText += `${matchIcon} **${match.job_keyword}** ↔ **${match.resume_keyword}**\n`;
                     });
                     analysisText += '\n';
                 } else {
-                    analysisText += `## ✅ Strong Matches\n*Not provided by AI*\n\n`;
+                    analysisText += `## Strong Matches\n*Not provided by AI*\n\n`;
                 }
                 
                 // Show unmatched keywords
                 if (ka.unmatched_job_keywords && ka.unmatched_job_keywords.length > 0) {
-                    analysisText += `## ❌ Missing Skills\n\n`;
+                    analysisText += `## Missing Skills\n\n`;
                     analysisText += `These skills are important for this role but missing from your resume:\n\n`;
                     ka.unmatched_job_keywords.forEach((keyword: string, i: number) => {
-                        analysisText += `🔴 **${keyword}**\n`;
+                        analysisText += `● **${keyword}**\n`;
                     });
                     analysisText += '\n';
                 } else {
-                    analysisText += `## ❌ Missing Skills\n*Not provided by AI*\n\n`;
+                    analysisText += `## Missing Skills\n*Not provided by AI*\n\n`;
                 }
             } else {
                 analysisText += `🔍 **Keyword Analysis:** Not provided by AI\n\n`;
@@ -2185,12 +2185,12 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             // Add recommendations
             const allRecommendations = recommendations || resultJson.missing_keywords || [];
             if (allRecommendations && allRecommendations.length > 0) {
-                analysisText += `## 💡 Action Plan\n\n`;
+                analysisText += `## Action Plan\n\n`;
                 
                 // Handle both new format (objects) and old format (strings)
                 if (typeof allRecommendations[0] === 'object') {
                     allRecommendations.forEach((rec: any, i: number) => {
-                        const priorityIcon = rec.priority === 1 ? '🔥' : rec.priority === 2 ? '⚡' : '📌';
+                        const priorityIcon = rec.priority === 1 ? '●' : rec.priority === 2 ? '○' : '·';
                         analysisText += `### ${priorityIcon} Priority ${rec.priority || i + 1}\n`;
                         analysisText += `**${rec.action || 'No action specified'}**\n\n`;
                         if (rec.keyword_to_add) analysisText += `**Add to resume:** ${rec.keyword_to_add}\n`;
@@ -2199,14 +2199,14 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                     });
                 } else {
                     // Old format - just strings
-                    analysisText += `### 🔥 Top Priorities\n\n`;
+                    analysisText += `### Top Priorities\n\n`;
                     allRecommendations.slice(0, 5).forEach((keyword: string, i: number) => {
                         analysisText += `**${i + 1}. Add "${keyword}" to your resume**\n`;
                         analysisText += `This skill is highly valued for this position.\n\n`;
                     });
                 }
             } else {
-                analysisText += `## 💡 Action Plan\n*No specific recommendations provided*\n\n`;
+                analysisText += `## Action Plan\n*No specific recommendations provided*\n\n`;
             }
             
             updateCurrentToolState({

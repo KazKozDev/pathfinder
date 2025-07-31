@@ -725,28 +725,12 @@ button {
 
 /* Resume Analysis Content Styling */
 .resume-analysis-content {
-    max-height: 400px;
-    overflow-y: auto;
-    padding-right: 0.5rem;
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
 }
 
-.resume-analysis-content::-webkit-scrollbar {
-    width: 6px;
-}
 
-.resume-analysis-content::-webkit-scrollbar-track {
-    background: var(--background-tertiary);
-    border-radius: 3px;
-}
-
-.resume-analysis-content::-webkit-scrollbar-thumb {
-    background: var(--card-border);
-    border-radius: 3px;
-}
-
-.resume-analysis-content::-webkit-scrollbar-thumb:hover {
-    background: var(--text-secondary);
-}
 
 .analysis-section {
     margin-bottom: 1.5rem;
