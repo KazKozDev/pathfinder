@@ -366,12 +366,115 @@ button {
     min-height: 100px;
 }
 .generated-text {
-    white-space: pre-wrap;
     word-wrap: break-word;
     font-family: 'Inter', sans-serif;
     color: var(--text-primary);
     line-height: 1.6;
     font-size: 0.9rem;
+}
+
+/* Markdown styling for generated text */
+.generated-text h1,
+.generated-text h2,
+.generated-text h3,
+.generated-text h4 {
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.generated-text h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.generated-text h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+}
+
+.generated-text h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.generated-text p {
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.generated-text strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.generated-text ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.generated-text li {
+    margin-bottom: 0.25rem;
+    color: var(--text-secondary);
+}
+
+.generated-text code {
+    background-color: var(--background-tertiary);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+    color: var(--text-primary);
+}
+
+.generated-text pre {
+    background-color: var(--background-tertiary);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+.generated-text pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+}
+
+.generated-text blockquote {
+    border-left: 4px solid var(--accent-primary);
+    padding-left: 1rem;
+    margin: 1rem 0;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.generated-text table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.generated-text th,
+.generated-text td {
+    border: 1px solid var(--card-border);
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.generated-text th {
+    background-color: var(--background-tertiary);
+    font-weight: 600;
+}
+
+.generated-text a {
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+
+.generated-text a:hover {
+    text-decoration: underline;
 }
 
 /* Upcoming & Recent Widgets */
@@ -674,6 +777,14 @@ button {
     align-items: center;
     justify-content: center;
 }
+
+.score-container h4 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+}
 .keywords-container {
     display: flex;
     flex-direction: column;
@@ -737,7 +848,6 @@ button {
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--card-border);
     line-height: 1.6;
-    white-space: pre-wrap;
     word-wrap: break-word;
 }
 
@@ -791,6 +901,65 @@ button {
     color: var(--text-secondary);
 }
 
+/* Markdown styling for resume analysis */
+.analysis-section code {
+    background-color: var(--background-tertiary);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+    color: var(--text-primary);
+}
+
+.analysis-section pre {
+    background-color: var(--background-tertiary);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+.analysis-section pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+}
+
+.analysis-section blockquote {
+    border-left: 4px solid var(--accent-primary);
+    padding-left: 1rem;
+    margin: 1rem 0;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.analysis-section table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.analysis-section th,
+.analysis-section td {
+    border: 1px solid var(--card-border);
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.analysis-section th {
+    background-color: var(--background-tertiary);
+    font-weight: 600;
+}
+
+.analysis-section a {
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+
+.analysis-section a:hover {
+    text-decoration: underline;
+}
+
 /* General Assistant Tool (replaces .chat-view) */
 .general-assistant-tool {
   display: flex; flex-direction: column;
@@ -813,6 +982,103 @@ button {
 .user-message { background-color: var(--accent-primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 .ai-message { background-color: var(--background-tertiary); color: var(--text-primary); align-self: flex-start; border-bottom-left-radius: 4px; }
 .ai-message strong { color: var(--accent-primary); }
+
+/* Markdown styling for chat messages */
+.ai-message h1,
+.ai-message h2,
+.ai-message h3,
+.ai-message h4 {
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.ai-message h1 {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.ai-message h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.ai-message h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 0.75rem;
+}
+
+.ai-message p {
+    margin-bottom: 0.75rem;
+}
+
+.ai-message ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.ai-message li {
+    margin-bottom: 0.25rem;
+}
+
+.ai-message code {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+}
+
+.ai-message pre {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 0.75rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 0.75rem 0;
+}
+
+.ai-message pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+}
+
+.ai-message blockquote {
+    border-left: 3px solid var(--accent-primary);
+    padding-left: 0.75rem;
+    margin: 0.75rem 0;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.ai-message table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0.75rem 0;
+    font-size: 0.9em;
+}
+
+.ai-message th,
+.ai-message td {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.4rem;
+    text-align: left;
+}
+
+.ai-message th {
+    background-color: rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+}
+
+.ai-message a {
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+
+.ai-message a:hover {
+    text-decoration: underline;
+}
 .error-message { background-color: var(--error); color: white; align-self: flex-start; border-bottom-left-radius: 4px; }
 .message-file-attachment {
     display: flex; align-items: center; gap: 0.5rem; background-color: rgba(0, 0, 0, 0.1);
@@ -1125,7 +1391,7 @@ button {
 /* Resume Editor Content & Preview */
 .resume-editor-content {
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr);
     gap: 1.5rem;
     height: 100%;
     overflow: hidden;

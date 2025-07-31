@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { createRoot } from 'react-dom/client';
 import { GoogleGenAI, Type, Chat } from '@google/genai';
 import apiService from './api.js';
@@ -686,7 +687,10 @@ const DashboardView = ({ jobs, settings, setSettings, onJobDoubleClick }: { jobs
 
     // Data for Widgets
     const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-    const recentApplications = jobs.filter(j => j.applicationDate && new Date(j.applicationDate).getTime() >= oneWeekAgo).length;
+    const recentApplications = jobs.filter(j => 
+        (j.applicationDate && new Date(j.applicationDate).getTime() >= oneWeekAgo) || 
+        (j.status === 'Applied' && j.dateAdded >= oneWeekAgo)
+    ).length;
     const goalProgress = settings.profile.weeklyGoal > 0 ? (recentApplications / settings.profile.weeklyGoal) * 100 : 0;
 
     useEffect(() => {
@@ -1520,17 +1524,7 @@ const GeneralAssistantTool = ({ messages, isLoading, onSendMessage, isAgentMixMo
 
     const renderMessageText = (msg: Message) => (
         <>
-            {msg.text.split(/(\*\*.*?\*\*|\*.*?\*)/g).map((part, i) => {
-                if (part.startsWith('**') && part.endsWith('**')) {
-                    const agentMatch = part.match(/^\*\*([\w\s]+ Agent:)\*\*/);
-                    if (agentMatch) {
-                        return <strong key={i}>{agentMatch[1]}</strong>;
-                    }
-                    return <strong key={i}>{part.slice(2, -2)}</strong>;
-                }
-                if (part.startsWith('*') && part.endsWith('*')) return <em key={i}>{part.slice(1, -1)}</em>;
-                return part;
-            })}
+            <ReactMarkdown>{msg.text}</ReactMarkdown>
             {msg.fileName && (
                 <div className="message-file-attachment">
                     <PaperclipIcon />
@@ -1966,8 +1960,14 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             const keywordAnalysis = resultJson.keyword_analysis || {};
             const skillsAnalysis = resultJson.skills_analysis || {};
             
+            // Initialize allRecommendations early so it can be used throughout the function
+            const allRecommendations = recommendations || resultJson.missing_keywords || [];
+            
+            // Debug: Log recommendations
+            console.log('Recommendations from AI:', allRecommendations);
+            
             // Create detailed analysis text
-            let analysisText = `# 📊 Resume Analysis Report\n\n`;
+            let analysisText = `# Resume Analysis Report\n\n`;
             
             // Overall score with visual indicator
             const getScoreColor = (score: number) => {
@@ -1981,16 +1981,16 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             
             // Add breakdown scores with visual indicators
             if (breakdown.skills_score !== undefined) {
-                analysisText += `### 🎯 Skills Match: ${getScoreColor(breakdown.skills_score)} ${breakdown.skills_score}%\n`;
+                analysisText += `### Skills Match: ${getScoreColor(breakdown.skills_score)} ${breakdown.skills_score}%\n`;
             }
             if (breakdown.experience_score !== undefined) {
-                analysisText += `### ⏰ Experience Match: ${getScoreColor(breakdown.experience_score)} ${breakdown.experience_score}%\n`;
+                analysisText += `### Experience Match: ${getScoreColor(breakdown.experience_score)} ${breakdown.experience_score}%\n`;
             }
             if (breakdown.keywords_score !== undefined) {
-                analysisText += `### 🔑 Keywords Match: ${getScoreColor(breakdown.keywords_score)} ${breakdown.keywords_score}%\n`;
+                analysisText += `### Keywords Match: ${getScoreColor(breakdown.keywords_score)} ${breakdown.keywords_score}%\n`;
             }
             if (breakdown.education_score !== undefined) {
-                analysisText += `### 🎓 Education Match: ${getScoreColor(breakdown.education_score)} ${breakdown.education_score}%\n`;
+                analysisText += `### Education Match: ${getScoreColor(breakdown.education_score)} ${breakdown.education_score}%\n`;
             }
             analysisText += '\n';
             
@@ -2085,7 +2085,7 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             // Add keyword analysis
             const ka = transparentAnalysis.keyword_analysis || keywordAnalysis;
             if (ka && Object.keys(ka).length > 0) {
-                analysisText += `🔍 **Keyword Analysis:**\n`;
+                analysisText += `**Keyword Analysis:**\n`;
                 analysisText += `Job Keywords: ${ka.total_job_keywords || 0}\n`;
                 analysisText += `Matched Keywords: ${ka.matched_keywords || 0}\n`;
                 analysisText += `Match Percentage: ${ka.match_percentage || 0}%\n\n`;
@@ -2134,17 +2134,19 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                         analysisText += `● **${keyword}**\n`;
                     });
                     analysisText += '\n';
+                    
+                    // Skill descriptions will be added in a separate LLM call
                 } else {
                     analysisText += `## Missing Skills\n*Not provided by AI*\n\n`;
                 }
             } else {
-                analysisText += `🔍 **Keyword Analysis:** Not provided by AI\n\n`;
+                analysisText += `**Keyword Analysis:** Not provided by AI\n\n`;
             }
             
             // Add skills analysis
             const sa = transparentAnalysis.skills_analysis || skillsAnalysis;
             if (sa && Object.keys(sa).length > 0) {
-                analysisText += `🎯 **Skills Analysis:**\n`;
+                analysisText += `**Skills Analysis:**\n`;
                 
                 if (sa.required_skills && sa.required_skills.length > 0) {
                     analysisText += `Required Skills: ${sa.required_skills.join(', ')}\n`;
@@ -2155,6 +2157,8 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                     }
                     if (sa.unmatched_required && sa.unmatched_required.length > 0) {
                         analysisText += `❌ Missing: ${sa.unmatched_required.join(', ')}\n`;
+                        
+                        // Skill descriptions will be added in a separate LLM call
                     } else {
                         analysisText += `❌ Missing: None\n`;
                     }
@@ -2171,6 +2175,8 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                     }
                     if (sa.unmatched_preferred && sa.unmatched_preferred.length > 0) {
                         analysisText += `❌ Missing: ${sa.unmatched_preferred.join(', ')}\n`;
+                        
+                        // Skill descriptions will be added in a separate LLM call
                     } else {
                         analysisText += `❌ Missing: None\n`;
                     }
@@ -2179,11 +2185,10 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                 }
                 analysisText += '\n';
             } else {
-                analysisText += `🎯 **Skills Analysis:** Not provided by AI\n\n`;
+                analysisText += `**Skills Analysis:** Not provided by AI\n\n`;
             }
             
             // Add recommendations
-            const allRecommendations = recommendations || resultJson.missing_keywords || [];
             if (allRecommendations && allRecommendations.length > 0) {
                 analysisText += `## Action Plan\n\n`;
                 
@@ -2209,12 +2214,107 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                 analysisText += `## Action Plan\n*No specific recommendations provided*\n\n`;
             }
             
+            // Store the main analysis result
             updateCurrentToolState({
                 resumeCheckResult: {
                     score: overallScore,
                     keywords: [analysisText]
                 }
             });
+
+            // Now make a separate LLM call to generate skill descriptions
+            try {
+                // Extract missing skills from the analysis
+                const missingSkills: string[] = [];
+                
+                // Get missing skills from keyword analysis
+                if (ka.unmatched_job_keywords && ka.unmatched_job_keywords.length > 0) {
+                    missingSkills.push(...ka.unmatched_job_keywords);
+                }
+                
+                // Get missing skills from skills analysis
+                if (sa.unmatched_required && sa.unmatched_required.length > 0) {
+                    missingSkills.push(...sa.unmatched_required);
+                }
+                if (sa.unmatched_preferred && sa.unmatched_preferred.length > 0) {
+                    missingSkills.push(...sa.unmatched_preferred);
+                }
+                
+                // Remove duplicates
+                const uniqueMissingSkills = [...new Set(missingSkills)];
+                
+                console.log('Missing skills found:', uniqueMissingSkills);
+                
+                if (uniqueMissingSkills.length > 0) {
+                    console.log('Starting second LLM call for skill descriptions...');
+                    
+                    // Load the skill descriptions prompt
+                    const techPromptResponse = await fetch('/prompts/technology-descriptions-prompt.txt');
+                    const techPromptTemplate = await techPromptResponse.text();
+                    
+                    console.log('Prompt template loaded, length:', techPromptTemplate.length);
+                    
+                    // Create the prompt with missing skills and analysis report
+                    const techPrompt = techPromptTemplate + `\n\n## Resume Analysis Report:\n${analysisText}\n\n## Missing Skills/Technologies:\n${uniqueMissingSkills.join(', ')}\n\nCreate descriptions for these skills.`;
+                    
+                    console.log('Full prompt created, length:', techPrompt.length);
+                    
+                    // Make the second LLM call
+                    const techResponse = await ai.models.generateContent({
+                        model: "gemini-2.5-flash",
+                        contents: techPrompt
+                    });
+                    
+                    console.log('Second LLM call completed, response length:', techResponse.text.length);
+                    
+                    // Parse the skill descriptions response
+                    let techResponseText = techResponse.text;
+                    
+                    // Remove markdown code blocks if present
+                    if (techResponseText.includes('```json')) {
+                        techResponseText = techResponseText.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+                    } else if (techResponseText.includes('```')) {
+                        techResponseText = techResponseText.replace(/```\n?/g, '');
+                    }
+                    
+                    techResponseText = techResponseText.trim();
+                    
+                                        // Parse the JSON response and format it properly
+                    try {
+                        const techResultJson = JSON.parse(techResponseText);
+                        const skillDescriptions = techResultJson.skill_descriptions || [];
+                        
+                        if (skillDescriptions.length > 0) {
+                            // Create formatted skill descriptions section
+                            let skillDescriptionsText = `\n\n# Skill Descriptions\n\n`;
+                            skillDescriptions.forEach((desc: any) => {
+                                skillDescriptionsText += `## ${desc.skill}\n\n${desc.description}\n\n`;
+                            });
+                            
+                            // Update the result with skill descriptions
+                            updateCurrentToolState({
+                                resumeCheckResult: {
+                                    score: overallScore,
+                                    keywords: [analysisText + skillDescriptionsText]
+                                }
+                            });
+                            console.log('Skill descriptions added successfully!');
+                        } else {
+                            console.log('No skill descriptions found in response');
+                        }
+                    } catch (techParseError) {
+                        console.error("Skill descriptions JSON parse error:", techParseError);
+                        console.error("Tech response text:", techResponseText);
+                        // Continue without skill descriptions if parsing fails
+                    }
+                } else {
+                    console.log('No missing skills found, skipping second LLM call');
+                }
+            } catch (techError) {
+                console.error("Skill descriptions generation failed:", techError);
+                console.error("Error details:", techError);
+                // Continue without skill descriptions if the call fails
+            }
 
         } catch (error) {
             console.error("Resume check failed:", error);
@@ -2399,12 +2499,20 @@ ${job.description || 'No detailed description provided.'}
                         <div className="ai-result-box large">
                             {isLoading && <div className="loading-indicator"><span>AI is analyzing your resume...</span></div>}
                             {resumeCheckResult && resumeCheckResult.keywords.length > 0 && (
-                                <div className="resume-analysis-content">
-                                    {resumeCheckResult.keywords.map((keyword, index) => (
-                                        <div key={index} className="analysis-section">
-                                            {keyword}
+                                <div className="resume-checker-results">
+                                    <div className="score-container">
+                                        <h4>Overall Match</h4>
+                                        <ScoreCircle score={resumeCheckResult.score} />
+                                    </div>
+                                    <div className="keywords-container">
+                                        <div className="resume-analysis-content">
+                                            {resumeCheckResult.keywords.map((keyword, index) => (
+                                                <div key={index} className="analysis-section">
+                                                    <ReactMarkdown>{keyword}</ReactMarkdown>
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
+                                    </div>
                                 </div>
                             )}
                             {!isLoading && !resumeCheckResult && <p className="placeholder-text">Your resume analysis will appear here.</p>}
@@ -2431,7 +2539,7 @@ ${job.description || 'No detailed description provided.'}
                         </div>
                         <div className="ai-result-box large">
                             {isLoading && <div className="loading-indicator"><span>AI is writing your letter...</span></div>}
-                            {resultText && <pre className="generated-text">{resultText}</pre>}
+                            {resultText && <div className="generated-text"><ReactMarkdown>{resultText}</ReactMarkdown></div>}
                             {!isLoading && !resultText && <p className="placeholder-text">Your generated cover letter will appear here.</p>}
                         </div>
                     </div>
@@ -2452,7 +2560,7 @@ ${job.description || 'No detailed description provided.'}
                         </div>
                         <div className="ai-result-box large">
                             {isLoading && <div className="loading-indicator"><span>AI is researching...</span></div>}
-                            {resultText && <pre className="generated-text">{resultText}</pre>}
+                            {resultText && <div className="generated-text"><ReactMarkdown>{resultText}</ReactMarkdown></div>}
                             {!isLoading && !resultText && <p className="placeholder-text">Your research report will appear here.</p>}
                         </div>
                     </div>

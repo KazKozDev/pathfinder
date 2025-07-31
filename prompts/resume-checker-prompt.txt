@@ -229,6 +229,7 @@ Count how many job description keywords appear in resume:
    - Each recommendation MUST suggest adding one of the unmatched_job_keywords
    - Prioritize recommendations by importance_score of missing keywords
    - Include detailed explanations for each match and recommendation
+   - **CRITICAL: Each recommendation MUST include specific action and clear reason why the keyword is important for this role**
    
 5. **Category Requirements:**
    - Job keywords: min 5 technical, min 3 domain, max 3 soft skills
@@ -249,3 +250,7 @@ Analyze both documents systematically following the smart analysis protocol abov
 3. Match keywords between arrays → keyword_matches array with detailed explanations
 4. unmatched_job_keywords = job_keywords MINUS matched keywords
 5. Recommendations = actions to add top 3 unmatched_job_keywords with reasons
+
+**CRITICAL: Each recommendation MUST include:**
+- Specific action to add the keyword to resume
+- Clear reason why this keyword is important for this role
