@@ -1964,19 +1964,30 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             if (breakdown.keywords_score !== undefined) analysisText += `🔑 Keywords Match: ${breakdown.keywords_score}%\n`;
             if (breakdown.education_score !== undefined) analysisText += `🎓 Education Match: ${breakdown.education_score}%\n\n`;
             
+            // Show raw JSON for debugging (first 1000 chars)
+            analysisText += `🔍 **Raw AI Response (first 1000 chars):**\n\`\`\`json\n${JSON.stringify(resultJson, null, 2).substring(0, 1000)}...\n\`\`\`\n\n`;
+            
             // Add job requirements summary
             if (transparentAnalysis.job_requirements) {
                 const req = transparentAnalysis.job_requirements;
                 analysisText += `📋 **Job Requirements:**\n`;
                 if (req.required_skills && req.required_skills.length > 0) {
                     analysisText += `Required: ${req.required_skills.join(', ')}\n`;
+                } else {
+                    analysisText += `Required: No required skills specified\n`;
                 }
                 if (req.preferred_skills && req.preferred_skills.length > 0) {
                     analysisText += `Preferred: ${req.preferred_skills.join(', ')}\n`;
+                } else {
+                    analysisText += `Preferred: No preferred skills specified\n`;
                 }
                 if (req.years_experience) analysisText += `Experience: ${req.years_experience} years\n`;
+                else analysisText += `Experience: Not specified\n`;
                 if (req.education_required) analysisText += `Education: ${req.education_required}\n`;
+                else analysisText += `Education: Not specified\n`;
                 analysisText += '\n';
+            } else {
+                analysisText += `📋 **Job Requirements:** Not provided by AI\n\n`;
             }
             
             // Add resume summary
@@ -1984,9 +1995,19 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                 const res = transparentAnalysis.resume_summary;
                 analysisText += `📄 **Resume Summary:**\n`;
                 if (res.total_experience_years) analysisText += `Experience: ${res.total_experience_years} years\n`;
+                else analysisText += `Experience: Not specified\n`;
                 if (res.education_level) analysisText += `Education: ${res.education_level}\n`;
+                else analysisText += `Education: Not specified\n`;
                 if (res.current_job_title) analysisText += `Current Role: ${res.current_job_title}\n`;
+                else analysisText += `Current Role: Not specified\n`;
+                if (res.key_achievements && res.key_achievements.length > 0) {
+                    analysisText += `Key Achievements: ${res.key_achievements.join(', ')}\n`;
+                } else {
+                    analysisText += `Key Achievements: Not specified\n`;
+                }
                 analysisText += '\n';
+            } else {
+                analysisText += `📄 **Resume Summary:** Not provided by AI\n\n`;
             }
             
             // Add keyword analysis
@@ -2004,6 +2025,8 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                         analysisText += `${i + 1}. ${kw.keyword} (${kw.category}, score: ${kw.importance_score})\n`;
                     });
                     analysisText += '\n';
+                } else {
+                    analysisText += `🏆 **Top Job Keywords:** Not provided by AI\n\n`;
                 }
                 
                 // Show top resume keywords
@@ -2013,6 +2036,8 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                         analysisText += `${i + 1}. ${kw.keyword} (${kw.category}, score: ${kw.relevance_score})\n`;
                     });
                     analysisText += '\n';
+                } else {
+                    analysisText += `📝 **Top Resume Keywords:** Not provided by AI\n\n`;
                 }
                 
                 // Show keyword matches
@@ -2022,6 +2047,8 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                         analysisText += `${i + 1}. "${match.job_keyword}" ↔ "${match.resume_keyword}" (${match.match_type}, ${Math.round(match.match_score * 100)}%)\n`;
                     });
                     analysisText += '\n';
+                } else {
+                    analysisText += `✅ **Keyword Matches:** Not provided by AI\n\n`;
                 }
                 
                 // Show unmatched keywords
@@ -2031,7 +2058,12 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                         analysisText += `${i + 1}. ${keyword}\n`;
                     });
                     analysisText += '\n';
+                } else {
+                    analysisText += `❌ **Missing Keywords:** Not provided by AI\n\n`;
                 }
+            } else {
+                analysisText += `🔍 **Keyword Analysis:** Not provided by AI\n\n`;
+            }
             }
             
             // Add skills analysis
@@ -2043,33 +2075,50 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                     analysisText += `Required Skills: ${sa.required_skills.join(', ')}\n`;
                     if (sa.matched_required && sa.matched_required.length > 0) {
                         analysisText += `✅ Matched: ${sa.matched_required.join(', ')}\n`;
+                    } else {
+                        analysisText += `✅ Matched: None\n`;
                     }
                     if (sa.unmatched_required && sa.unmatched_required.length > 0) {
                         analysisText += `❌ Missing: ${sa.unmatched_required.join(', ')}\n`;
+                    } else {
+                        analysisText += `❌ Missing: None\n`;
                     }
+                } else {
+                    analysisText += `Required Skills: Not specified\n`;
                 }
                 
                 if (sa.preferred_skills && sa.preferred_skills.length > 0) {
                     analysisText += `Preferred Skills: ${sa.preferred_skills.join(', ')}\n`;
                     if (sa.matched_preferred && sa.matched_preferred.length > 0) {
                         analysisText += `✅ Matched: ${sa.matched_preferred.join(', ')}\n`;
+                    } else {
+                        analysisText += `✅ Matched: None\n`;
                     }
                     if (sa.unmatched_preferred && sa.unmatched_preferred.length > 0) {
                         analysisText += `❌ Missing: ${sa.unmatched_preferred.join(', ')}\n`;
+                    } else {
+                        analysisText += `❌ Missing: None\n`;
                     }
+                } else {
+                    analysisText += `Preferred Skills: Not specified\n`;
                 }
                 analysisText += '\n';
+            } else {
+                analysisText += `🎯 **Skills Analysis:** Not provided by AI\n\n`;
             }
             
             // Add recommendations
             if (recommendations && recommendations.length > 0) {
                 analysisText += `💡 **Recommendations:**\n`;
                 recommendations.forEach((rec: any, i: number) => {
-                    analysisText += `${i + 1}. **${rec.action}**\n`;
+                    analysisText += `${i + 1}. **${rec.action || 'No action specified'}**\n`;
                     if (rec.keyword_to_add) analysisText += `   Add keyword: "${rec.keyword_to_add}"\n`;
                     if (rec.reason) analysisText += `   Reason: ${rec.reason}\n`;
+                    if (rec.priority) analysisText += `   Priority: ${rec.priority}\n`;
                     analysisText += '\n';
                 });
+            } else {
+                analysisText += `💡 **Recommendations:** No recommendations provided by AI\n\n`;
             }
             
             updateCurrentToolState({
