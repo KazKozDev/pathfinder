@@ -1,160 +1,175 @@
-# Pathfinder - Job Tracking Application
+# Pathfinder ▸ An Intelligent Job Search Assistant
 
-Полнофункциональное приложение для отслеживания поиска работы с AI-помощником, построенное на React + TypeScript + SQLite.
+![React](https://img.shields.io/badge/React-18+-blue.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)
+![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
+![Express.js](https://img.shields.io/badge/Express.js-4+-green.svg)
+![SQLite](https://img.shields.io/badge/SQLite-3+-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-## 🚀 Быстрый старт
+Pathfinder is a **full-stack application** designed to organize and streamline the job search process. It helps you track applications, manage resumes and contacts, and uses AI to automate routine tasks and prepare for interviews.
 
-### Предварительные требования
-- Node.js 18+ 
-- npm или yarn
+The application runs **locally on your machine** (React + Node.js + SQLite), ensuring complete **privacy and control** over your data.
 
-### Установка и запуск
+## Table of Contents
 
-1. **Установите зависимости для фронтенда:**
-```bash
-npm install
-```
+- [Application Features](#application-features)
+- [For Developers: Technical Implementation](#for-developers-technical-implementation)
+- [Getting Started](#getting-started)
+- [License](#license)
 
-2. **Установите зависимости для сервера:**
-```bash
-cd server
-npm install
-cd ..
-```
+## Application Features
+This section describes Pathfinder's main screens and functions in the order you will encounter them.
 
-3. **Запустите сервер базы данных:**
-```bash
-cd server
-npm start
-```
-Сервер будет доступен на http://localhost:3001
+1. Dashboard
+Your command center, which brings together key information:
 
-4. **В новом терминале запустите фронтенд:**
-```bash
-npm run dev
-```
-Приложение будет доступно на http://localhost:5173 или http://localhost:5174
+Statistics: An overview of your application count by stage.
 
-### 🚀 Быстрый запуск (рекомендуется)
-Используйте скрипт для автоматического запуска всех сервисов:
+AI Skill Analysis: Compares your skills against a job's requirements.
+
+AI Next Actions: Recommends what to do next.
+
+Goals & Deadlines: Tracks your progress and upcoming events.
+
+2. Job Tracker (Kanban Board)
+A visual board for managing your application pipeline:
+
+Status Columns: Drag and drop applications through stages from "Wishlist" to "Offer."
+
+Detailed View: All information about a job, including notes and contacts, in one place.
+
+3. Calendar
+An integrated calendar for all your scheduling needs:
+
+Event Syncing: Interviews and deadlines from the tracker appear here automatically.
+
+Link to Jobs: Associate events with specific applications and contacts.
+
+4. Resumes
+A builder for creating and managing multiple resume versions:
+
+Editor & Live Preview: A user-friendly editor with a real-time preview.
+
+Export: Save your resumes as PDF or Word files.
+
+5. Network (CRM)
+Your personal CRM for professional contacts:
+
+Contact Cards: Store contact details and interaction history.
+
+Link to Jobs: Easily track who is helping you with which opportunity.
+
+6. AI Tools
+A powerful suite of tools to automate your work:
+
+Resume Analysis: Scores your resume's relevance to a job description.
+
+Cover Letter Generation: Automatically drafts cover letters based on your data.
+
+Voice Interview Simulator: Practice interviewing with an AI in real time.
+
+Company Research: Gathers detailed information on a potential employer.
+
+7. Analytics
+A section with charts to measure your job search effectiveness:
+
+Hiring Funnel: Analyze your conversion rates from application to offer.
+
+Activity & Sources: Track your productivity and most effective channels.
+
+8. Preferences
+Full control over the application:
+
+AI Management: Customize system prompts to tailor the AI's behavior.
+
+Data Management: Export or delete all your data at any time.
+
+## For Developers: Technical Implementation
+
+This section is for those interested in the project's technical architecture.
+
+### Architecture
+The project is a **full-stack application** featuring:
+- **Client** → React, TypeScript
+- **Server** → Node.js, Express  
+- **Database** → SQLite (local)
+
+### AI Integration
+The AI logic is implemented on the server-side and uses several key approaches:
+
+#### Retrieval-Augmented Generation (RAG)
+Used for resume analysis and company research. The system retrieves relevant information first, then feeds it to a Large Language Model (LLM) to generate a response.
+
+#### AI Agent System  
+User requests are handled by a system of specialized agents ("Recruiter," "Researcher"), each configured for a specific task.
+
+#### Tool Use
+Certain agents (e.g., the "Researcher") can use external tools like the Google Search API to gather live data.
+
+#### Multimodality
+The interview simulator works with voice, using speech-to-text and text-to-speech services.
+
+## Getting Started
+
+### Prerequisites
+- **Node.js** ▸ v18 or newer
+- **Package Manager** ▸ npm or yarn
+
+### Recommended Launch
+Use the provided script to automatically launch the entire project:
+
 ```bash
 ./start.sh
 ```
-Этот скрипт автоматически:
-- Остановит существующие процессы
-- Запустит сервер базы данных
-- Запустит фронтенд
-- Проверит доступность сервисов
-- Откроет приложение в браузере
 
-## 🗄️ База данных
+This script will install dependencies (if needed), start the server and client, and then open the application in your browser.
 
-Приложение использует SQLite базу данных со следующими таблицами:
+### Manual Installation
 
-- **jobs** - вакансии и их статусы
-- **resumes** - резюме пользователя
-- **contacts** - контакты и сеть
-- **calendar_events** - события календаря
-- **settings** - настройки приложения
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/KazKozDev/pathfinder.git
+   cd pathfinder
+   ```
 
-База данных автоматически создается при первом запуске сервера в файле `server/pathfinder.db`.
+2. **Install dependencies**
+   ```bash
+   npm install
+   cd server && npm install && cd ..
+   ```
 
-## 🛠️ API Endpoints
+3. **Set up environment variables**
+   ```bash
+   # Create a .env file in the root directory
+   echo "API_KEY=your_google_ai_api_key" > .env
+   ```
 
-### Jobs
-- `GET /api/jobs` - получить все вакансии
-- `POST /api/jobs` - создать новую вакансию
-- `PUT /api/jobs/:id` - обновить вакансию
-- `DELETE /api/jobs/:id` - удалить вакансию
+4. **Start the server** (in a separate terminal)
+   ```bash
+   cd server && npm start
+   ```
 
-### Resumes
-- `GET /api/resumes` - получить все резюме
-- `POST /api/resumes` - создать новое резюме
-- `PUT /api/resumes/:id` - обновить резюме
-- `DELETE /api/resumes/:id` - удалить резюме
+5. **Start the client** (in a new terminal)
+   ```bash
+   npm run dev
+   ```
 
-### Contacts
-- `GET /api/contacts` - получить все контакты
-- `POST /api/contacts` - создать новый контакт
-- `PUT /api/contacts/:id` - обновить контакт
-- `DELETE /api/contacts/:id` - удалить контакт
+## Contributing
 
-### Events
-- `GET /api/events` - получить все события
-- `POST /api/events` - создать новое событие
-- `PUT /api/events/:id` - обновить событие
-- `DELETE /api/events/:id` - удалить событие
+Contributions are welcome! Here's how you can help:
 
-### Settings
-- `GET /api/settings` - получить настройки
-- `PUT /api/settings` - обновить настройки
+1. **Fork the repository**
+2. **Create a feature branch** ▸ `git checkout -b feature/amazing-feature`
+3. **Commit your changes** ▸ `git commit -m 'Add amazing feature'`
+4. **Push to the branch** ▸ `git push origin feature/amazing-feature`
+5. **Open a Pull Request**
 
-## 🎯 Основные функции
+Please ensure your code follows the existing style and includes appropriate tests.
 
-### 📊 Dashboard
-- Обзор статистики поиска работы
-- AI-анализ навыков для вакансий
-- Рекомендации следующих действий
-- Отслеживание целей
+## Support
 
-### 📋 Job Tracker
-- Канбан-доска для управления вакансиями
-- Детальная информация о каждой вакансии
-- Автогенерация сопроводительных писем
-- Логирование коммуникаций
+If you like this project, please give it a star ⭐
 
-### 📅 Calendar
-- Календарь событий и дедлайнов
-- Связь событий с вакансиями и контактами
-- Напоминания о следующих шагах
-
-### 📄 Resumes
-- Управление несколькими резюме
-- Экспорт в PDF и Word
-- AI-анализ соответствия вакансиям
-
-### 👥 Network
-- CRM для управления контактами
-- Связь контактов с вакансиями
-- Теги и категоризация
-
-### 🤖 AI Tools
-- Генерация сопроводительных писем
-- Анализ резюме
-- Голосовые интервью
-- Глубокое исследование компаний
-
-### 📈 Analytics
-- Статистика поиска работы
-- Анализ эффективности
-- Отслеживание прогресса
-
-## 🛡️ Безопасность
-
-- Все данные хранятся локально в SQLite
-- Нет внешних зависимостей для хранения данных
-- CORS настроен для локальной разработки
-
-## 🔧 Разработка
-
-### Структура проекта
-```
-zzz/
-├── index.tsx          # Основное приложение
-├── api.js             # API сервис
-├── server/
-│   ├── server.js      # Express сервер
-│   ├── database.js    # SQLite управление
-│   └── package.json   # Зависимости сервера
-└── package.json       # Зависимости фронтенда
-```
-
-### Переменные окружения
-Создайте файл `.env` в корне проекта:
-```
-API_KEY=your_google_ai_api_key
-```
-
-## 📝 Лицензия
-
-MIT License
+For questions, feedback, or support, reach out to:
+[Artem KK](https://www.linkedin.com/in/kazkozdev/) | MIT [LICENSE](LICENSE)
