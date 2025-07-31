@@ -1949,11 +1949,15 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                 throw new Error("Invalid JSON response from AI");
             }
             
-            // Extract data from the new transparent format
-            const overallScore = resultJson.overall_match_percentage || 0;
+            // Extract data from the response (handle both old and new formats)
+            const overallScore = resultJson.overall_match_percentage || resultJson.score || 0;
             const breakdown = resultJson.breakdown || {};
             const transparentAnalysis = resultJson.transparent_analysis || {};
             const recommendations = resultJson.recommendations || [];
+            
+            // Handle old format where data is directly in resultJson
+            const keywordAnalysis = resultJson.keyword_analysis || {};
+            const skillsAnalysis = resultJson.skills_analysis || {};
             
             // Create detailed analysis text
             let analysisText = `📊 **Overall Match: ${overallScore}%**\n\n`;
@@ -1968,8 +1972,9 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             analysisText += `🔍 **Raw AI Response (first 1000 chars):**\n\`\`\`json\n${JSON.stringify(resultJson, null, 2).substring(0, 1000)}...\n\`\`\`\n\n`;
             
             // Add job requirements summary
-            if (transparentAnalysis.job_requirements) {
-                const req = transparentAnalysis.job_requirements;
+            const jobReq = transparentAnalysis.job_requirements || resultJson.job_requirements;
+            if (jobReq && Object.keys(jobReq).length > 0) {
+                const req = jobReq;
                 analysisText += `📋 **Job Requirements:**\n`;
                 if (req.required_skills && req.required_skills.length > 0) {
                     analysisText += `Required: ${req.required_skills.join(', ')}\n`;
@@ -1991,8 +1996,9 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             }
             
             // Add resume summary
-            if (transparentAnalysis.resume_summary) {
-                const res = transparentAnalysis.resume_summary;
+            const resumeSum = transparentAnalysis.resume_summary || resultJson.resume_summary;
+            if (resumeSum && Object.keys(resumeSum).length > 0) {
+                const res = resumeSum;
                 analysisText += `📄 **Resume Summary:**\n`;
                 if (res.total_experience_years) analysisText += `Experience: ${res.total_experience_years} years\n`;
                 else analysisText += `Experience: Not specified\n`;
@@ -2011,8 +2017,8 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             }
             
             // Add keyword analysis
-            if (transparentAnalysis.keyword_analysis) {
-                const ka = transparentAnalysis.keyword_analysis;
+            const ka = transparentAnalysis.keyword_analysis || keywordAnalysis;
+            if (ka && Object.keys(ka).length > 0) {
                 analysisText += `🔍 **Keyword Analysis:**\n`;
                 analysisText += `Job Keywords: ${ka.total_job_keywords || 0}\n`;
                 analysisText += `Matched Keywords: ${ka.matched_keywords || 0}\n`;
@@ -2067,8 +2073,8 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             }
             
             // Add skills analysis
-            if (transparentAnalysis.skills_analysis) {
-                const sa = transparentAnalysis.skills_analysis;
+            const sa = transparentAnalysis.skills_analysis || skillsAnalysis;
+            if (sa && Object.keys(sa).length > 0) {
                 analysisText += `🎯 **Skills Analysis:**\n`;
                 
                 if (sa.required_skills && sa.required_skills.length > 0) {
@@ -2108,15 +2114,26 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
             }
             
             // Add recommendations
-            if (recommendations && recommendations.length > 0) {
+            const allRecommendations = recommendations || resultJson.missing_keywords || [];
+            if (allRecommendations && allRecommendations.length > 0) {
                 analysisText += `💡 **Recommendations:**\n`;
-                recommendations.forEach((rec: any, i: number) => {
-                    analysisText += `${i + 1}. **${rec.action || 'No action specified'}**\n`;
-                    if (rec.keyword_to_add) analysisText += `   Add keyword: "${rec.keyword_to_add}"\n`;
-                    if (rec.reason) analysisText += `   Reason: ${rec.reason}\n`;
-                    if (rec.priority) analysisText += `   Priority: ${rec.priority}\n`;
-                    analysisText += '\n';
-                });
+                
+                // Handle both new format (objects) and old format (strings)
+                if (typeof allRecommendations[0] === 'object') {
+                    allRecommendations.forEach((rec: any, i: number) => {
+                        analysisText += `${i + 1}. **${rec.action || 'No action specified'}**\n`;
+                        if (rec.keyword_to_add) analysisText += `   Add keyword: "${rec.keyword_to_add}"\n`;
+                        if (rec.reason) analysisText += `   Reason: ${rec.reason}\n`;
+                        if (rec.priority) analysisText += `   Priority: ${rec.priority}\n`;
+                        analysisText += '\n';
+                    });
+                } else {
+                    // Old format - just strings
+                    allRecommendations.forEach((keyword: string, i: number) => {
+                        analysisText += `${i + 1}. **Add keyword: "${keyword}"**\n`;
+                        analysisText += `   Reason: This keyword appears in the job description but is missing from your resume\n\n`;
+                    });
+                }
             } else {
                 analysisText += `💡 **Recommendations:** No recommendations provided by AI\n\n`;
             }
