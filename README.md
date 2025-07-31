@@ -117,8 +117,9 @@ The interview simulator works with voice, using speech-to-text and text-to-speec
 ### Prerequisites
 - **Node.js** ▸ v18 or newer
 - **Package Manager** ▸ npm or yarn
+- **Google Gemini AI API Key** ▸ Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
 
-### Recommended Launch
+### Quick Start (Recommended)
 Use the provided script to automatically launch the entire project:
 
 ```bash
@@ -135,16 +136,19 @@ This script will install dependencies (if needed), start the server and client, 
    cd pathfinder
    ```
 
-2. **Install dependencies**
+2. **Set up environment variables**
+   ```bash
+   # Copy the example environment file
+   cp .env.example .env
+   
+   # Edit the .env file and add your API key
+   # GEMINI_API_KEY=your_actual_api_key_here
+   ```
+
+3. **Install dependencies**
    ```bash
    npm install
    cd server && npm install && cd ..
-   ```
-
-3. **Set up environment variables**
-   ```bash
-   # Create a .env file in the root directory
-   echo "API_KEY=your_google_ai_api_key" > .env
    ```
 
 4. **Start the server** (in a separate terminal)
@@ -156,6 +160,19 @@ This script will install dependencies (if needed), start the server and client, 
    ```bash
    npm run dev
    ```
+
+### Environment Variables
+
+The application requires the following environment variables:
+
+- `GEMINI_API_KEY`: Your Google Gemini AI API key (required for AI features)
+- `PORT`: Server port (default: 3001)
+
+### Security Notes
+
+- Never commit your `.env` file to version control
+- The `.env.example` file contains safe placeholder values
+- Database files (`*.db`) are automatically ignored by Git
 
 ## Contributing
 
