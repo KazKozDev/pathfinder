@@ -1927,7 +1927,27 @@ const AiToolsView = ({ jobs, resumes, crmContacts, settings, messages, isLoading
                 contents: prompt
             });
 
-            const resultJson = JSON.parse(response.text);
+            // Clean the response text to extract JSON
+            let responseText = response.text;
+            
+            // Remove markdown code blocks if present
+            if (responseText.includes('```json')) {
+                responseText = responseText.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+            } else if (responseText.includes('```')) {
+                responseText = responseText.replace(/```\n?/g, '');
+            }
+            
+            // Trim whitespace
+            responseText = responseText.trim();
+            
+            let resultJson;
+            try {
+                resultJson = JSON.parse(responseText);
+            } catch (parseError) {
+                console.error("JSON parse error:", parseError);
+                console.error("Response text:", responseText);
+                throw new Error("Invalid JSON response from AI");
+            }
             
             // Extract data from the new transparent format
             const overallScore = resultJson.overall_match_percentage || 0;
