@@ -373,7 +373,6 @@ const JobDetailModal = ({ job, crmContacts, resumes, settings, onSave, onCancel,
     
     const handleGenerateLetter = async () => {
         setIsGenerating(true);
-        const promptTemplate = settings.prompts.coverLetter;
         const selectedResume = resumes.find(r => r.id === formData.selectedResumeId);
         
         if (!selectedResume) {
@@ -382,16 +381,23 @@ const JobDetailModal = ({ job, crmContacts, resumes, settings, onSave, onCancel,
             return;
         }
 
-        const isDataSufficient = selectedResume.summary.trim() !== '' && selectedResume.experience.length > 0 && formData.description.trim().length > 50;
-
-        if (!isDataSufficient) {
-             let errorMsg = "INSUFFICIENT_DATA: ";
-             if(selectedResume.summary.trim() === '') errorMsg += "Resume summary is empty. ";
-             if(selectedResume.experience.length === 0) errorMsg += "Resume has no work experience. ";
-             if(formData.description.trim().length <= 50) errorMsg += "Job description is too short. ";
-             setFormData(prev => ({ ...prev, coverLetter: errorMsg.trim() }));
-             setIsGenerating(false);
-             return;
+        // Validate that we have the necessary data
+        if (!formData.description || formData.description.trim().length < 50) {
+            setFormData(prev => ({ ...prev, coverLetter: "Error: Job description is too short or missing. Please add a detailed job description first." }));
+            setIsGenerating(false);
+            return;
+        }
+        
+        if (!selectedResume.summary || selectedResume.summary.trim() === '') {
+            setFormData(prev => ({ ...prev, coverLetter: "Error: Resume summary is missing. Please add a summary to your resume first." }));
+            setIsGenerating(false);
+            return;
+        }
+        
+        if (!selectedResume.experience || selectedResume.experience.length === 0) {
+            setFormData(prev => ({ ...prev, coverLetter: "Error: Resume has no work experience. Please add work experience to your resume first." }));
+            setIsGenerating(false);
+            return;
         }
 
         const contact = formData.contactIds?.[0] ? crmContacts.find(c => c.id === formData.contactIds[0]) : null;
@@ -418,18 +424,24 @@ const JobDetailModal = ({ job, crmContacts, resumes, settings, onSave, onCancel,
             currentDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
         };
 
+        const promptTemplate = settings.prompts.coverLetter;
         const prompt = promptTemplate.replace('{{JSON_DATA}}', JSON.stringify(dataForPrompt, null, 2));
 
         try {
-            const response = await ai.models.generateContent({ model: "gemini-2.5-flash", contents: prompt });
-            if (response.text.startsWith('INSUFFICIENT_DATA:')) {
-                 setFormData(prev => ({...prev, coverLetter: `Could not generate: ${response.text}`}));
+            const response = await ai.models.generateContent({ 
+                model: "gemini-2.5-flash", 
+                contents: prompt 
+            });
+            
+            // Check if the response is valid
+            if (response.text && response.text.trim().length > 0) {
+                setFormData(prev => ({...prev, coverLetter: response.text}));
             } else {
-                 setFormData(prev => ({...prev, coverLetter: response.text}));
+                setFormData(prev => ({...prev, coverLetter: "Error: Generated cover letter is empty. Please try again."}));
             }
         } catch (error) {
             console.error("Cover letter generation failed:", error);
-            setFormData(prev => ({...prev, coverLetter: "Error: Could not generate cover letter."}));
+            setFormData(prev => ({...prev, coverLetter: "Error: Could not generate cover letter. Please try again."}));
         } finally {
             setIsGenerating(false);
         }
