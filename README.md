@@ -1,6 +1,6 @@
-# Pathfinder ▸ An Intelligent Job Search Assistant
+# Pathfinder 
 
-> Lost track of your applications? Pathfinder brings order to your job search with smart AI assistance
+Lost track of your applications? Pathfinder brings order to your job search with smart AI assistance
 
 ![React](https://img.shields.io/badge/React-18+-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)
