@@ -7,11 +7,11 @@
 ![RAG](https://img.shields.io/badge/RAG-Retrieval--Augmented--Generation-orange.svg)
 ![Multi-Agent](https://img.shields.io/badge/Multi--Agent-AI%20Systems-purple.svg)
 
-Lost track of your applications? Pathfinder brings order to your job search with smart AI assistance.
+Lost track of your applications? Pathfinder brings order to your job search with smart AI tools.
 
-Pathfinder is a **full-stack application** designed to organize and streamline the job search process. It helps you track applications, manage resumes and contacts, and uses AI to automate routine tasks and prepare for interviews.
+Pathfinder is the first full-stack application crafted by addressing real user complaints about existing job trackers, designed to organize and streamline the job search process. It helps you track applications, manage resumes and contacts, and uses carefully tuned AI tools to automate routine tasks and prepare for interviews, all protected against errors like hallucinations.
 
-The application runs **locally on your machine** (React + Node.js + SQLite), ensuring complete **privacy and control** over your data.
+The application runs locally on your machine (React + Node.js + SQLite), ensuring complete privacy and control over your data.
 
 ![yyyx (1)](https://github.com/user-attachments/assets/764978c0-e554-479f-b341-a1912dc01eb6)
 
