@@ -1,7 +1,4 @@
 # Pathfinder 
-
-Lost track of your applications? Pathfinder brings order to your job search with smart AI assistance
-
 ![React](https://img.shields.io/badge/React-18+-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
@@ -9,6 +6,8 @@ Lost track of your applications? Pathfinder brings order to your job search with
 ![SQLite](https://img.shields.io/badge/SQLite-3+-blue.svg)
 ![RAG](https://img.shields.io/badge/RAG-Retrieval--Augmented--Generation-orange.svg)
 ![Multi-Agent](https://img.shields.io/badge/Multi--Agent-AI%20Systems-purple.svg)
+
+Lost track of your applications? Pathfinder brings order to your job search with smart AI assistance.
 
 Pathfinder is a **full-stack application** designed to organize and streamline the job search process. It helps you track applications, manage resumes and contacts, and uses AI to automate routine tasks and prepare for interviews.
 
