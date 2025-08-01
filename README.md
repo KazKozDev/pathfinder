@@ -7,7 +7,6 @@ Lost track of your applications? Pathfinder brings order to your job search with
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![Express.js](https://img.shields.io/badge/Express.js-4+-green.svg)
 ![SQLite](https://img.shields.io/badge/SQLite-3+-blue.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![RAG](https://img.shields.io/badge/RAG-Retrieval--Augmented--Generation-orange.svg)
 ![Multi-Agent](https://img.shields.io/badge/Multi--Agent-AI%20Systems-purple.svg)
 
