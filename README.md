@@ -13,6 +13,8 @@ Pathfinder is a **full-stack application** designed to organize and streamline t
 
 The application runs **locally on your machine** (React + Node.js + SQLite), ensuring complete **privacy and control** over your data.
 
+![t (2)](https://github.com/user-attachments/assets/d582b003-9eb2-49b4-9c2e-52069554e836)
+
 ## Table of Contents
 
 - [Application Features](#application-features)
