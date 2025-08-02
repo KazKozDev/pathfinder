@@ -65,7 +65,7 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed guidelines.
 
 - **Issues**: Create GitHub issues for bugs
 - **Discussions**: Use GitHub Discussions for questions
-- **Security**: Email security@pathfinder.dev for vulnerabilities
+- **Security**: Email kazkozdev@gmail.com for vulnerabilities
 
 ## License
 
