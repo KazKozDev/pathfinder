@@ -58,4 +58,4 @@ We take security vulnerabilities seriously. If you discover a security issue, pl
 
 Security updates will be released as patch versions (e.g., 1.0.1, 1.0.2). Always update to the latest version to ensure you have the latest security fixes.
 
-Thank you for helping keep Pathfinder secure! 🔒 
+Thank you for helping keep Pathfinder secure! 🔒

@@ -1,166 +1,166 @@
 const API_BASE_URL = 'http://localhost:3001/api';
 
 class ApiService {
-    async request(endpoint, options = {}) {
-        const url = `${API_BASE_URL}${endpoint}`;
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers,
-            },
-            ...options,
-        };
+  async request(endpoint, options = {}) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      ...options,
+    };
 
-        try {
-            const response = await fetch(url, config);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            if (response.status === 204) {
-                return null; // No content
-            }
-            
-            return await response.json();
-        } catch (error) {
-            console.error('API request failed:', error);
-            throw error;
-        }
-    }
+    try {
+      const response = await fetch(url, config);
 
-    // Jobs API
-    async getJobs() {
-        return this.request('/jobs');
-    }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-    async getJob(id) {
-        return this.request(`/jobs/${id}`);
-    }
+      if (response.status === 204) {
+        return null; // No content
+      }
 
-    async createJob(job) {
-        return this.request('/jobs', {
-            method: 'POST',
-            body: JSON.stringify(job),
-        });
+      return await response.json();
+    } catch (error) {
+      console.error('API request failed:', error);
+      throw error;
     }
+  }
 
-    async updateJob(job) {
-        return this.request(`/jobs/${job.id}`, {
-            method: 'PUT',
-            body: JSON.stringify(job),
-        });
-    }
+  // Jobs API
+  async getJobs() {
+    return this.request('/jobs');
+  }
 
-    async deleteJob(id) {
-        return this.request(`/jobs/${id}`, {
-            method: 'DELETE',
-        });
-    }
+  async getJob(id) {
+    return this.request(`/jobs/${id}`);
+  }
 
-    // Resumes API
-    async getResumes() {
-        return this.request('/resumes');
-    }
+  async createJob(job) {
+    return this.request('/jobs', {
+      method: 'POST',
+      body: JSON.stringify(job),
+    });
+  }
 
-    async getResume(id) {
-        return this.request(`/resumes/${id}`);
-    }
+  async updateJob(job) {
+    return this.request(`/jobs/${job.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(job),
+    });
+  }
 
-    async createResume(resume) {
-        return this.request('/resumes', {
-            method: 'POST',
-            body: JSON.stringify(resume),
-        });
-    }
+  async deleteJob(id) {
+    return this.request(`/jobs/${id}`, {
+      method: 'DELETE',
+    });
+  }
 
-    async updateResume(resume) {
-        return this.request(`/resumes/${resume.id}`, {
-            method: 'PUT',
-            body: JSON.stringify(resume),
-        });
-    }
+  // Resumes API
+  async getResumes() {
+    return this.request('/resumes');
+  }
 
-    async deleteResume(id) {
-        return this.request(`/resumes/${id}`, {
-            method: 'DELETE',
-        });
-    }
+  async getResume(id) {
+    return this.request(`/resumes/${id}`);
+  }
 
-    // Contacts API
-    async getContacts() {
-        return this.request('/contacts');
-    }
+  async createResume(resume) {
+    return this.request('/resumes', {
+      method: 'POST',
+      body: JSON.stringify(resume),
+    });
+  }
 
-    async getContact(id) {
-        return this.request(`/contacts/${id}`);
-    }
+  async updateResume(resume) {
+    return this.request(`/resumes/${resume.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(resume),
+    });
+  }
 
-    async createContact(contact) {
-        return this.request('/contacts', {
-            method: 'POST',
-            body: JSON.stringify(contact),
-        });
-    }
+  async deleteResume(id) {
+    return this.request(`/resumes/${id}`, {
+      method: 'DELETE',
+    });
+  }
 
-    async updateContact(contact) {
-        return this.request(`/contacts/${contact.id}`, {
-            method: 'PUT',
-            body: JSON.stringify(contact),
-        });
-    }
+  // Contacts API
+  async getContacts() {
+    return this.request('/contacts');
+  }
 
-    async deleteContact(id) {
-        return this.request(`/contacts/${id}`, {
-            method: 'DELETE',
-        });
-    }
+  async getContact(id) {
+    return this.request(`/contacts/${id}`);
+  }
 
-    // Events API
-    async getEvents() {
-        return this.request('/events');
-    }
+  async createContact(contact) {
+    return this.request('/contacts', {
+      method: 'POST',
+      body: JSON.stringify(contact),
+    });
+  }
 
-    async getEvent(id) {
-        return this.request(`/events/${id}`);
-    }
+  async updateContact(contact) {
+    return this.request(`/contacts/${contact.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(contact),
+    });
+  }
 
-    async createEvent(event) {
-        return this.request('/events', {
-            method: 'POST',
-            body: JSON.stringify(event),
-        });
-    }
+  async deleteContact(id) {
+    return this.request(`/contacts/${id}`, {
+      method: 'DELETE',
+    });
+  }
 
-    async updateEvent(event) {
-        return this.request(`/events/${event.id}`, {
-            method: 'PUT',
-            body: JSON.stringify(event),
-        });
-    }
+  // Events API
+  async getEvents() {
+    return this.request('/events');
+  }
 
-    async deleteEvent(id) {
-        return this.request(`/events/${id}`, {
-            method: 'DELETE',
-        });
-    }
+  async getEvent(id) {
+    return this.request(`/events/${id}`);
+  }
 
-    // Settings API
-    async getSettings() {
-        return this.request('/settings');
-    }
+  async createEvent(event) {
+    return this.request('/events', {
+      method: 'POST',
+      body: JSON.stringify(event),
+    });
+  }
 
-    async updateSettings(settings) {
-        return this.request('/settings', {
-            method: 'PUT',
-            body: JSON.stringify(settings),
-        });
-    }
+  async updateEvent(event) {
+    return this.request(`/events/${event.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(event),
+    });
+  }
 
-    // Health check
-    async healthCheck() {
-        return this.request('/health');
-    }
+  async deleteEvent(id) {
+    return this.request(`/events/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Settings API
+  async getSettings() {
+    return this.request('/settings');
+  }
+
+  async updateSettings(settings) {
+    return this.request('/settings', {
+      method: 'PUT',
+      body: JSON.stringify(settings),
+    });
+  }
+
+  // Health check
+  async healthCheck() {
+    return this.request('/health');
+  }
 }
 
-export default new ApiService(); 
+export default new ApiService();

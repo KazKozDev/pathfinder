@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Markdown rendering support for all AI tool outputs
 - Skill descriptions generation via separate LLM call
 - AI-Powered Next Actions with market data integration
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced resume analysis with detailed skill explanations
 
 ### Changed
+
 - Updated webpage title from "AI Job Tracker" to "Pathfinder"
 - Improved resume editor layout (adjusted grid proportions)
 - Enhanced weekly application goal counting logic
@@ -26,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated "Path" in title to dirty yellow color (#D4AF37)
 
 ### Fixed
+
 - Fixed weekly application goal counting to include both applicationDate and Applied status
 - Resolved ReferenceError in resume checker skill descriptions
 - Fixed markdown formatting in analysis results
@@ -33,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed skill descriptions output format and language
 
 ### Removed
+
 - Removed "Generate Letter" button from job detail modal
 - Removed hardcoded skill descriptions
 - Removed motivational language from salary research suggestions
@@ -40,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-01-XX
 
 ### Added
+
 - Initial release of Pathfinder
 - Job tracking with drag-and-drop interface
 - Resume editor with PDF/DOC export
@@ -53,8 +58,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Google Gemini AI integration
 
 ### Features
+
 - Full-stack React + Node.js application
 - TypeScript implementation
 - Responsive design
 - Real-time AI assistance
-- Comprehensive job search workflow management 
+- Comprehensive job search workflow management

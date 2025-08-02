@@ -29,6 +29,7 @@ Welcome to the Pathfinder documentation! This directory contains additional docu
 ## Architecture
 
 Pathfinder is built with:
+
 - **Frontend**: React + TypeScript + Vite
 - **Backend**: Node.js + SQLite
 - **AI**: Google Gemini API
@@ -37,18 +38,21 @@ Pathfinder is built with:
 ## Key Features
 
 ### Job Tracking
+
 - Drag-and-drop interface
 - Status management
 - Application tracking
 - Contact integration
 
 ### AI Tools
+
 - Resume analysis and scoring
 - Cover letter generation
 - Deep research capabilities
 - Voice interview simulation
 
 ### Data Management
+
 - Local SQLite database
 - Export/import functionality
 - Backup and restore
@@ -65,4 +69,4 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed guidelines.
 
 ## License
 
-MIT License - see [LICENSE](../LICENSE) for details. 
+MIT License - see [LICENSE](../LICENSE) for details.

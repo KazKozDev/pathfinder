@@ -1,4 +1,5 @@
-# Pathfinder 
+# Pathfinder
+
 ![React](https://img.shields.io/badge/React-18+-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
@@ -23,6 +24,7 @@ The application runs locally on your machine (React + Node.js + SQLite), ensurin
 - [Contributing](#contributing)
 
 ## Application Features
+
 This section describes Pathfinder's main screens and functions in the order you will encounter them.
 
 📊 1. Dashboard
@@ -90,34 +92,43 @@ Full control over the application:
 This section is for those interested in the project's technical architecture.
 
 ### Architecture
+
 The project is a **full-stack application** featuring:
+
 - **Client** → React, TypeScript
-- **Server** → Node.js, Express  
+- **Server** → Node.js, Express
 - **Database** → SQLite (local)
 
 ### AI Integration
+
 The AI logic is implemented on the server-side and uses several key approaches:
 
 #### Retrieval-Augmented Generation (RAG)
+
 Used for resume analysis and company research. The system retrieves relevant information first, then feeds it to a Large Language Model (LLM) to generate a response.
 
-#### AI Agent System  
+#### AI Agent System
+
 User requests are handled by a system of specialized agents ("Recruiter," "Researcher"), each configured for a specific task.
 
 #### Tool Use
+
 Certain agents (e.g., the "Researcher") can use external tools like the Google Search API to gather live data.
 
 #### Multimodality
+
 The interview simulator works with voice, using speech-to-text and text-to-speech services.
 
 ## Getting Started
 
 ### Prerequisites
+
 - **Node.js** ▸ v18 or newer
 - **Package Manager** ▸ npm or yarn
 - **Google Gemini AI API Key** ▸ Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
 
 ### Quick Start (Recommended)
+
 Use the provided script to automatically launch the entire project:
 
 ```bash
@@ -129,27 +140,31 @@ This script will install dependencies (if needed), start the server and client, 
 ### Manual Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/KazKozDev/pathfinder.git
    cd pathfinder
    ```
 
 2. **Set up environment variables**
+
    ```bash
    # Copy the example environment file
    cp .env.example .env
-   
+
    # Edit the .env file and add your API key
    # GEMINI_API_KEY=your_actual_api_key_here
    ```
 
 3. **Install dependencies**
+
    ```bash
    npm install
    cd server && npm install && cd ..
    ```
 
 4. **Start the server** (in a separate terminal)
+
    ```bash
    cd server && npm start
    ```

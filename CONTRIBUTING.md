@@ -5,11 +5,13 @@ Thank you for your interest in contributing to Pathfinder! This document provide
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js (v18 or higher)
 - npm or yarn
 - Git
 
 ### Setup
+
 1. Fork the repository
 2. Clone your fork: `git clone https://github.com/your-username/pathfinder.git`
 3. Install dependencies: `npm install`
@@ -18,17 +20,20 @@ Thank you for your interest in contributing to Pathfinder! This document provide
 ## Development Guidelines
 
 ### Code Style
+
 - Use TypeScript for all new code
 - Follow existing code formatting patterns
 - Use meaningful variable and function names
 - Add comments for complex logic
 
 ### File Structure
+
 - Keep components in the main `index.tsx` file for now
 - Store prompts in the `prompts/` directory
 - Server code goes in the `server/` directory
 
 ### Testing
+
 - Test your changes locally before submitting
 - Ensure the application starts without errors
 - Test the feature you're working on
@@ -36,6 +41,7 @@ Thank you for your interest in contributing to Pathfinder! This document provide
 ## Making Changes
 
 ### Creating a Pull Request
+
 1. Create a new branch: `git checkout -b feature/your-feature-name`
 2. Make your changes
 3. Test thoroughly
@@ -44,7 +50,9 @@ Thank you for your interest in contributing to Pathfinder! This document provide
 6. Create a Pull Request
 
 ### Commit Message Format
+
 Use clear, descriptive commit messages:
+
 - `Add resume checker functionality`
 - `Fix weekly application goal counting`
 - `Update AI prompts for better responses`
@@ -52,22 +60,26 @@ Use clear, descriptive commit messages:
 ## Areas for Contribution
 
 ### Frontend
+
 - UI/UX improvements
 - New features for job tracking
 - Resume editor enhancements
 - AI tool integrations
 
 ### Backend
+
 - API improvements
 - Database optimizations
 - Server performance enhancements
 
 ### Documentation
+
 - README updates
 - Code documentation
 - User guides
 
 ### AI Features
+
 - Prompt engineering
 - New AI tools
 - Response quality improvements
@@ -82,8 +94,9 @@ Use clear, descriptive commit messages:
 ## Questions?
 
 If you have questions about contributing, please:
+
 1. Check the existing issues
 2. Create a new issue for bugs or feature requests
 3. Ask in discussions for general questions
 
-Thank you for contributing to Pathfinder! 🚀 
+Thank you for contributing to Pathfinder! 🚀
