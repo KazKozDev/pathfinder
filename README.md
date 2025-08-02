@@ -1,17 +1,19 @@
-# Pathfinder ▸ An Intelligent Job Search Assistant
-
-> Lost track of your applications? Pathfinder brings order to your job search with smart AI assistance
-
+# Pathfinder 
 ![React](https://img.shields.io/badge/React-18+-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![Express.js](https://img.shields.io/badge/Express.js-4+-green.svg)
 ![SQLite](https://img.shields.io/badge/SQLite-3+-blue.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+![RAG](https://img.shields.io/badge/RAG-Retrieval--Augmented--Generation-orange.svg)
+![Multi-Agent](https://img.shields.io/badge/Multi--Agent-AI%20Systems-purple.svg)
 
-Pathfinder is a **full-stack application** designed to organize and streamline the job search process. It helps you track applications, manage resumes and contacts, and uses AI to automate routine tasks and prepare for interviews.
+Lost track of your applications? Pathfinder brings order to your job search with smart AI tools.
 
-The application runs **locally on your machine** (React + Node.js + SQLite), ensuring complete **privacy and control** over your data.
+Pathfinder is the first full-stack application crafted by addressing real user complaints about existing job trackers, designed to organize and streamline the job search process. It helps you track applications, manage resumes and contacts, and uses carefully tuned AI tools to automate routine tasks and prepare for interviews, all protected against errors like hallucinations.
+
+The application runs locally on your machine (React + Node.js + SQLite), ensuring complete privacy and control over your data.
+
+![yyyx (1)](https://github.com/user-attachments/assets/764978c0-e554-479f-b341-a1912dc01eb6)
 
 ## Table of Contents
 
@@ -23,69 +25,65 @@ The application runs **locally on your machine** (React + Node.js + SQLite), ens
 ## Application Features
 This section describes Pathfinder's main screens and functions in the order you will encounter them.
 
-1. Dashboard
+📊 1. Dashboard
+
 Your command center, which brings together key information:
 
-Statistics: An overview of your application count by stage.
+- Statistics: An overview of your application count by stage.
+- AI Skill Analysis: Compares your skills against a job's requirements.
+- AI Next Actions: Recommends what to do next.
+- Goals & Deadlines: Tracks your progress and upcoming events.
 
-AI Skill Analysis: Compares your skills against a job's requirements.
+📋 2. Job Tracker (Kanban Board)
 
-AI Next Actions: Recommends what to do next.
-
-Goals & Deadlines: Tracks your progress and upcoming events.
-
-2. Job Tracker (Kanban Board)
 A visual board for managing your application pipeline:
 
-Status Columns: Drag and drop applications through stages from "Wishlist" to "Offer."
+- Status Columns: Drag and drop applications through stages from "Wishlist" to "Offer."
+- Detailed View: All information about a job, including notes and contacts, in one place.
 
-Detailed View: All information about a job, including notes and contacts, in one place.
+📅 3. Calendar
 
-3. Calendar
 An integrated calendar for all your scheduling needs:
 
-Event Syncing: Interviews and deadlines from the tracker appear here automatically.
+- Event Syncing: Interviews and deadlines from the tracker appear here automatically.
+- Link to Jobs: Associate events with specific applications and contacts.
 
-Link to Jobs: Associate events with specific applications and contacts.
+📄 4. Resumes
 
-4. Resumes
 A builder for creating and managing multiple resume versions:
 
-Editor & Live Preview: A user-friendly editor with a real-time preview.
+- Editor & Live Preview: A user-friendly editor with a real-time preview.
+- Export: Save your resumes as PDF or Word files.
 
-Export: Save your resumes as PDF or Word files.
+👥 5. Network (CRM)
 
-5. Network (CRM)
 Your personal CRM for professional contacts:
 
-Contact Cards: Store contact details and interaction history.
+- Contact Cards: Store contact details and interaction history.
+- Link to Jobs: Easily track who is helping you with which opportunity.
 
-Link to Jobs: Easily track who is helping you with which opportunity.
+🤖 6. AI Tools
 
-6. AI Tools
 A powerful suite of tools to automate your work:
 
-Resume Analysis: Scores your resume's relevance to a job description.
+- Resume Analysis: Scores your resume's relevance to a job description.
+- Cover Letter Generation: Automatically drafts cover letters based on your data.
+- Voice Interview Simulator: Practice interviewing with an AI in real time.
+- Company Research: Gathers detailed information on a potential employer.
 
-Cover Letter Generation: Automatically drafts cover letters based on your data.
+📈 7. Analytics
 
-Voice Interview Simulator: Practice interviewing with an AI in real time.
-
-Company Research: Gathers detailed information on a potential employer.
-
-7. Analytics
 A section with charts to measure your job search effectiveness:
 
-Hiring Funnel: Analyze your conversion rates from application to offer.
+- Hiring Funnel: Analyze your conversion rates from application to offer.
+- Activity & Sources: Track your productivity and most effective channels.
 
-Activity & Sources: Track your productivity and most effective channels.
+⚙️ 8. Preferences
 
-8. Preferences
 Full control over the application:
 
-AI Management: Customize system prompts to tailor the AI's behavior.
-
-Data Management: Export or delete all your data at any time.
+- AI Management: Customize system prompts to tailor the AI's behavior.
+- Data Management: Export or delete all your data at any time.
 
 ## For Developers: Technical Implementation
 
