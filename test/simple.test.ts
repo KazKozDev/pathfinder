@@ -12,4 +12,4 @@ describe('Simple Test', () => {
   it('should handle arrays', () => {
     expect([1, 2, 3]).toHaveLength(3);
   });
-}); 
+});

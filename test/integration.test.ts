@@ -36,29 +36,37 @@ describe('API Integration Tests', () => {
         expect(createdJob.title).toBe('Test Developer');
 
         // Read the job
-        const readResponse = await fetch(`${baseUrl}/api/jobs/${createdJob.id}`);
+        const readResponse = await fetch(
+          `${baseUrl}/api/jobs/${createdJob.id}`
+        );
         expect(readResponse.status).toBe(200);
         const readJob = await readResponse.json();
         expect(readJob.id).toBe(createdJob.id);
 
         // Update the job
         const updatedJob = { ...readJob, status: 'Interviewing' };
-        const updateResponse = await fetch(`${baseUrl}/api/jobs/${createdJob.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(updatedJob),
-        });
+        const updateResponse = await fetch(
+          `${baseUrl}/api/jobs/${createdJob.id}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedJob),
+          }
+        );
 
         expect(updateResponse.status).toBe(200);
         const updatedJobResponse = await updateResponse.json();
         expect(updatedJobResponse.status).toBe('Interviewing');
 
         // Delete the job
-        const deleteResponse = await fetch(`${baseUrl}/api/jobs/${createdJob.id}`, {
-          method: 'DELETE',
-        });
+        const deleteResponse = await fetch(
+          `${baseUrl}/api/jobs/${createdJob.id}`,
+          {
+            method: 'DELETE',
+          }
+        );
 
         expect(deleteResponse.status).toBe(200);
       } catch (error) {
@@ -133,4 +141,4 @@ describe('API Integration Tests', () => {
       }
     });
   });
-}); 
+});

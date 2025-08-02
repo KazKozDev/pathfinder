@@ -1,7 +1,17 @@
-# Mobile Application for Pathfinder
+# [Feature] Full-Functionality Mobile Application (iOS & Android)
 
 ## Description
-Create a mobile application (iOS/Android) that provides full access to Pathfinder job tracking features on mobile devices.
+As a user, I want a fully functional mobile application so that I can manage my entire job search on the go. This includes discovering, saving, and tracking applications from my phone, which is where I often browse for jobs.
+
+## Why this is important
+The modern job search is not confined to a desktop. Users frequently browse and save opportunities on their mobile devices throughout the day. Competitor Huntr is heavily criticized for its mobile app's limited functionality, which creates a disjointed user experience by forcing users back to their desktops for key actions. A powerful, full-featured mobile app will be a significant competitive advantage and will meet the real-world needs of today's job seekers.
+
+## Acceptance Criteria
+
+- [ ] Native mobile applications are developed for both iOS and Android.
+- [ ] The mobile app provides access to all core features of the web application, including the Kanban board, calendar, resume manager, and CRM.
+- [ ] Crucially, the mobile app includes a mechanism (e.g., via the "Share" sheet or an in-app browser) to save job postings from mobile browsers or other job apps (like LinkedIn) directly into the Pathfinder tracker.
+- [ ] Data is seamlessly synchronized in real-time between the mobile app, web app, and browser extension.
 
 ## Features
 - **Cross-platform** support (React Native or Flutter)

@@ -1,14 +1,23 @@
-# Browser Extension for Job Vacancy Tracking
+# [Feature] Browser Extension for 1-Click Job Saving
 
 ## Description
-Create a browser extension that allows users to easily add job vacancies from job sites directly to their Pathfinder tracking system.
+As a user, I want a browser extension so that I can save job postings from any website directly into my Pathfinder job tracker with a single click. This eliminates the need for manual data entry, which is the most tedious part of the job search process and a primary reason for adopting a dedicated tracker over a spreadsheet.
 
-## Features
-- **One-click job addition** from popular job sites (LinkedIn, Indeed, Glassdoor, etc.)
-- **Automatic data extraction** of job title, company, location, salary, description
-- **Direct integration** with Pathfinder API
-- **Smart parsing** of job requirements and benefits
-- **Customizable** job status and priority on import
+## Why this is important
+Analysis of competitors like Teal, Huntr, and Eztrackr shows that the browser extension is their most highly-valued feature. It's the primary mechanism for getting data into the system. Without this, Pathfinder will feel cumbersome and will struggle to attract users from other platforms or convert them from using simple spreadsheets. Furthermore, competitor Simplify has shown that a poorly performing extension can be a major source of user frustration, so stability and performance are paramount.
+
+## Acceptance Criteria
+
+- [ ] A browser extension is developed for Chrome and Firefox.
+- [ ] The extension allows users to save a job posting with a single click.
+- [ ] The extension automatically parses and extracts the following fields:
+  - Job Title
+  - Company Name
+  - Job Description
+  - Salary (if available)
+  - Location
+- [ ] The extension is lightweight and does not cause noticeable browser slowdowns or crashes.
+- [ ] The saved job automatically appears in the "Wishlist" or "Saved" column of the user's Kanban board in the main application.
 
 ## Technical Requirements
 - **Browser compatibility**: Chrome, Firefox, Safari

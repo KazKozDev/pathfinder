@@ -7,28 +7,53 @@ const mockDatabase = {
     { id: 2, title: 'Designer', company: 'Design Inc', status: 'Interviewing' },
   ],
   resumes: [
-    { id: 1, name: 'Resume 1', contact: { name: 'John Doe', email: 'john@example.com' } },
-    { id: 2, name: 'Resume 2', contact: { name: 'Jane Smith', email: 'jane@example.com' } },
+    {
+      id: 1,
+      name: 'Resume 1',
+      contact: { name: 'John Doe', email: 'john@example.com' },
+    },
+    {
+      id: 2,
+      name: 'Resume 2',
+      contact: { name: 'Jane Smith', email: 'jane@example.com' },
+    },
   ],
   contacts: [
-    { id: 1, name: 'John Doe', company: 'Tech Corp', email: 'john@example.com' },
-    { id: 2, name: 'Jane Smith', company: 'Design Inc', email: 'jane@example.com' },
+    {
+      id: 1,
+      name: 'John Doe',
+      company: 'Tech Corp',
+      email: 'john@example.com',
+    },
+    {
+      id: 2,
+      name: 'Jane Smith',
+      company: 'Design Inc',
+      email: 'jane@example.com',
+    },
   ],
 };
 
 // Mock database operations
 const dbOperations = {
   getJobs: () => Promise.resolve(mockDatabase.jobs),
-  getJob: (id: number) => Promise.resolve(mockDatabase.jobs.find(job => job.id === id)),
+  getJob: (id: number) =>
+    Promise.resolve(mockDatabase.jobs.find(job => job.id === id)),
   createJob: (job: any) => {
-    const newJob = { ...job, id: Math.max(...mockDatabase.jobs.map(j => j.id)) + 1 };
+    const newJob = {
+      ...job,
+      id: Math.max(...mockDatabase.jobs.map(j => j.id)) + 1,
+    };
     mockDatabase.jobs.push(newJob);
     return Promise.resolve(newJob);
   },
   updateJob: (id: number, updates: any) => {
     const jobIndex = mockDatabase.jobs.findIndex(job => job.id === id);
     if (jobIndex !== -1) {
-      mockDatabase.jobs[jobIndex] = { ...mockDatabase.jobs[jobIndex], ...updates };
+      mockDatabase.jobs[jobIndex] = {
+        ...mockDatabase.jobs[jobIndex],
+        ...updates,
+      };
       return Promise.resolve(mockDatabase.jobs[jobIndex]);
     }
     return Promise.reject(new Error('Job not found'));
@@ -50,15 +75,38 @@ describe('Database Operations', () => {
     // Reset mock database to initial state
     mockDatabase.jobs = [
       { id: 1, title: 'Developer', company: 'Tech Corp', status: 'Applied' },
-      { id: 2, title: 'Designer', company: 'Design Inc', status: 'Interviewing' },
+      {
+        id: 2,
+        title: 'Designer',
+        company: 'Design Inc',
+        status: 'Interviewing',
+      },
     ];
     mockDatabase.resumes = [
-      { id: 1, name: 'Resume 1', contact: { name: 'John Doe', email: 'john@example.com' } },
-      { id: 2, name: 'Resume 2', contact: { name: 'Jane Smith', email: 'jane@example.com' } },
+      {
+        id: 1,
+        name: 'Resume 1',
+        contact: { name: 'John Doe', email: 'john@example.com' },
+      },
+      {
+        id: 2,
+        name: 'Resume 2',
+        contact: { name: 'Jane Smith', email: 'jane@example.com' },
+      },
     ];
     mockDatabase.contacts = [
-      { id: 1, name: 'John Doe', company: 'Tech Corp', email: 'john@example.com' },
-      { id: 2, name: 'Jane Smith', company: 'Design Inc', email: 'jane@example.com' },
+      {
+        id: 1,
+        name: 'John Doe',
+        company: 'Tech Corp',
+        email: 'john@example.com',
+      },
+      {
+        id: 2,
+        name: 'Jane Smith',
+        company: 'Design Inc',
+        email: 'jane@example.com',
+      },
     ];
   });
 
@@ -98,27 +146,31 @@ describe('Database Operations', () => {
     it('should update an existing job', async () => {
       const updates = { status: 'Offer' };
       const updatedJob = await dbOperations.updateJob(1, updates);
-      
+
       expect(updatedJob.status).toBe('Offer');
       expect(updatedJob.title).toBe('Developer'); // Other fields unchanged
     });
 
     it('should throw error when updating non-existent job', async () => {
       const updates = { status: 'Offer' };
-      
-      await expect(dbOperations.updateJob(999, updates)).rejects.toThrow('Job not found');
+
+      await expect(dbOperations.updateJob(999, updates)).rejects.toThrow(
+        'Job not found'
+      );
     });
 
     it('should delete an existing job', async () => {
       const deletedJob = await dbOperations.deleteJob(1);
-      
+
       expect(deletedJob.id).toBe(1);
       expect(mockDatabase.jobs).toHaveLength(1);
       expect(mockDatabase.jobs[0].id).toBe(2);
     });
 
     it('should throw error when deleting non-existent job', async () => {
-      await expect(dbOperations.deleteJob(999)).rejects.toThrow('Job not found');
+      await expect(dbOperations.deleteJob(999)).rejects.toThrow(
+        'Job not found'
+      );
     });
   });
 
@@ -133,7 +185,7 @@ describe('Database Operations', () => {
     it('should have correct resume structure', async () => {
       const resumes = await dbOperations.getResumes();
       const resume = resumes[0];
-      
+
       expect(resume).toHaveProperty('id');
       expect(resume).toHaveProperty('name');
       expect(resume).toHaveProperty('contact');
@@ -153,7 +205,7 @@ describe('Database Operations', () => {
     it('should have correct contact structure', async () => {
       const contacts = await dbOperations.getContacts();
       const contact = contacts[0];
-      
+
       expect(contact).toHaveProperty('id');
       expect(contact).toHaveProperty('name');
       expect(contact).toHaveProperty('company');
@@ -175,7 +227,9 @@ describe('Database Operations', () => {
       expect(retrievedJob).toEqual(newJob);
 
       // Update it
-      const updatedJob = await dbOperations.updateJob(newJob.id, { status: 'Interviewing' });
+      const updatedJob = await dbOperations.updateJob(newJob.id, {
+        status: 'Interviewing',
+      });
       expect(updatedJob.status).toBe('Interviewing');
 
       // Verify the update persisted
@@ -190,4 +244,4 @@ describe('Database Operations', () => {
       expect(deletedJob).toBeUndefined();
     });
   });
-}); 
+});

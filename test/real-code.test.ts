@@ -41,7 +41,7 @@ describe('Real Code Tests', () => {
       });
 
       const response = await fetch('/api/nonexistent');
-      
+
       expect(response.status).toBe(404);
       expect(response.ok).toBe(false);
     });
@@ -52,12 +52,14 @@ describe('Real Code Tests', () => {
       // Test database operations from server/database.js
       const mockDb = {
         prepare: vi.fn().mockReturnValue({
-          all: vi.fn().mockResolvedValue([
-            { id: 1, title: 'Test Job', company: 'Test Company' }
-          ]),
+          all: vi
+            .fn()
+            .mockResolvedValue([
+              { id: 1, title: 'Test Job', company: 'Test Company' },
+            ]),
           run: vi.fn().mockResolvedValue({ lastInsertRowid: 1 }),
-          get: vi.fn().mockResolvedValue({ id: 1, title: 'Test Job' })
-        })
+          get: vi.fn().mockResolvedValue({ id: 1, title: 'Test Job' }),
+        }),
       };
 
       // Simulate getting jobs
@@ -69,13 +71,13 @@ describe('Real Code Tests', () => {
     it('should handle database insertions', async () => {
       const mockDb = {
         prepare: vi.fn().mockReturnValue({
-          run: vi.fn().mockResolvedValue({ lastInsertRowid: 5 })
-        })
+          run: vi.fn().mockResolvedValue({ lastInsertRowid: 5 }),
+        }),
       };
 
-      const result = await mockDb.prepare(
-        'INSERT INTO jobs (title, company) VALUES (?, ?)'
-      ).run('New Job', 'New Company');
+      const result = await mockDb
+        .prepare('INSERT INTO jobs (title, company) VALUES (?, ?)')
+        .run('New Job', 'New Company');
 
       expect(result.lastInsertRowid).toBe(5);
     });
@@ -88,13 +90,13 @@ describe('Real Code Tests', () => {
       const mockState = {
         jobs: [],
         currentTool: 'jobs',
-        showAddForm: false
+        showAddForm: false,
       };
 
       // Simulate adding a job
       const newJob = { id: 1, title: 'Test Job', company: 'Test Company' };
       const updatedJobs = [...mockState.jobs, newJob];
-      
+
       expect(updatedJobs).toHaveLength(1);
       expect(updatedJobs[0].title).toBe('Test Job');
     });
@@ -103,14 +105,14 @@ describe('Real Code Tests', () => {
       // Test form validation logic
       const validateJobForm = (job: any) => {
         const errors: string[] = [];
-        
+
         if (!job.title?.trim()) {
           errors.push('Title is required');
         }
         if (!job.company?.trim()) {
           errors.push('Company is required');
         }
-        
+
         return errors;
       };
 
@@ -131,8 +133,13 @@ describe('Real Code Tests', () => {
       // Test data filtering logic
       const jobs = [
         { id: 1, title: 'Developer', company: 'Tech Corp', status: 'Applied' },
-        { id: 2, title: 'Designer', company: 'Design Inc', status: 'Interviewing' },
-        { id: 3, title: 'Manager', company: 'Big Corp', status: 'Applied' }
+        {
+          id: 2,
+          title: 'Designer',
+          company: 'Design Inc',
+          status: 'Interviewing',
+        },
+        { id: 3, title: 'Manager', company: 'Big Corp', status: 'Applied' },
       ];
 
       // Filter by status
@@ -148,14 +155,30 @@ describe('Real Code Tests', () => {
     it('should handle data sorting', () => {
       // Test data sorting logic
       const jobs = [
-        { id: 3, title: 'Manager', company: 'Big Corp', dateAdded: '2025-01-03' },
-        { id: 1, title: 'Developer', company: 'Tech Corp', dateAdded: '2025-01-01' },
-        { id: 2, title: 'Designer', company: 'Design Inc', dateAdded: '2025-01-02' }
+        {
+          id: 3,
+          title: 'Manager',
+          company: 'Big Corp',
+          dateAdded: '2025-01-03',
+        },
+        {
+          id: 1,
+          title: 'Developer',
+          company: 'Tech Corp',
+          dateAdded: '2025-01-01',
+        },
+        {
+          id: 2,
+          title: 'Designer',
+          company: 'Design Inc',
+          dateAdded: '2025-01-02',
+        },
       ];
 
       // Sort by date (newest first)
-      const sortedByDate = [...jobs].sort((a, b) => 
-        new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
+      const sortedByDate = [...jobs].sort(
+        (a, b) =>
+          new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
       );
 
       expect(sortedByDate[0].id).toBe(3);
@@ -163,7 +186,9 @@ describe('Real Code Tests', () => {
       expect(sortedByDate[2].id).toBe(1);
 
       // Sort by title
-      const sortedByTitle = [...jobs].sort((a, b) => a.title.localeCompare(b.title));
+      const sortedByTitle = [...jobs].sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
       expect(sortedByTitle[0].title).toBe('Designer');
       expect(sortedByTitle[1].title).toBe('Developer');
       expect(sortedByTitle[2].title).toBe('Manager');
@@ -188,7 +213,7 @@ describe('Real Code Tests', () => {
 
       const id1 = generateId();
       const id2 = generateId();
-      
+
       expect(typeof id1).toBe('number');
       expect(typeof id2).toBe('number');
       expect(id1).toBeGreaterThanOrEqual(0);
@@ -239,7 +264,7 @@ describe('Real Code Tests', () => {
       });
 
       const response = await fetch('/api/jobs');
-      
+
       try {
         await response.json();
         fail('Should have thrown an error');
@@ -249,4 +274,4 @@ describe('Real Code Tests', () => {
       }
     });
   });
-}); 
+});

@@ -16,7 +16,7 @@ describe('API Endpoints', () => {
     try {
       const response = await fetch(`${baseUrl}/api/health`);
       expect(response.status).toBe(200);
-      
+
       const data = await response.json();
       expect(data).toHaveProperty('status');
       expect(data.status).toBe('OK');
@@ -31,7 +31,7 @@ describe('API Endpoints', () => {
     try {
       const response = await fetch(`${baseUrl}/api/jobs`);
       expect(response.status).toBe(200);
-      
+
       const data = await response.json();
       expect(Array.isArray(data)).toBe(true);
     } catch (error) {
