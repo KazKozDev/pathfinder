@@ -9,17 +9,36 @@ Before writing a single line of code, I used AI to systematically analyze user c
 I gave the **same research task** to all 5 LLM chatbots:
 **"Find popular job tracking apps and gather user reviews from App Store, Google Play Store, Reddit, Twitter, and forums. Focus on negative feedback and common complaints."**
 
+**Why 5 Different AI Tools?**
+Each AI has different access and capabilities:
+- **Perplexity** - has access to Twitter and real-time data
+- **ChatGPT** - strong at analyzing Reddit and forum discussions
+- **Gemini** - good at Google Play Store and App Store reviews
+- **Claude** - excellent at Quora and detailed analysis
+- **Groq** - used for discovery research and final consolidation
+
 ### **The AI Research Process:**
 
 1. **Parallel Research**: All 5 AI tools searched for the same information independently
-2. **Data Collection**: Each AI gathered reviews from multiple sources
-3. **Data Consolidation**: I merged all findings into one comprehensive report using Gemini
-4. **Classification**: Used AI to categorize feedback into positive/negative categories
-5. **Structure Planning**: Asked AI to generate feature structure based on user complaints
+2. **Data Collection**: Each AI gathered reviews from multiple sources using their unique access
+3. **Discovery Research**: Used Groq's discovery research function to gather additional insights
+4. **Data Consolidation**: I merged all findings into one comprehensive report using **Groq**
+5. **Final Analysis**: Used Groq to categorize feedback, answer questions, and generate feature structure
 
 ### **AI-Powered Classification Results:**
 
-After consolidating findings from all 5 AI tools, I used Gemini to analyze and classify the data:
+After consolidating findings from all 5 AI tools, I used **Groq** for both discovery research and final analysis:
+
+**Groq's Discovery Research:**
+- **Gather additional insights** from its knowledge base
+- **Find patterns** that other AI tools missed
+- **Provide context** from its training data
+
+**Groq's Final Analysis:**
+- **Answer questions** about the research results
+- **Cite sources** for all information to ensure transparency
+- **Classify feedback** into actionable insights
+- **Generate feature structure** based on user complaints
 
 **Consolidated Findings:**
 - **500+ user reviews** collected from multiple sources
@@ -28,9 +47,9 @@ After consolidating findings from all 5 AI tools, I used Gemini to analyze and c
 - **45% feature requests** - what users wanted but didn't have
 
 **AI-Generated Structure Request:**
-I then asked Gemini: *"Based on these user complaints, create a feature structure for a job tracking app that solves these problems."*
+I then asked Groq: *"Based on these user complaints, create a feature structure for a job tracking app that solves these problems."*
 
-The AI provided a detailed feature roadmap that became Pathfinder's architecture.
+Groq provided a detailed feature roadmap with transparent sourcing that became Pathfinder's architecture.
 
 ## Real User Complaints I Found
 
@@ -99,10 +118,10 @@ I gave the same research task to 5 different LLM chatbots and let them work inde
 - ChatGPT  
 - Gemini
 - Claude
-- Bing Chat
+- Groq
 
 **Consolidation Process:**
-After collecting data from all 5 AI tools, I used Gemini to merge all findings into one comprehensive report and classify the feedback.
+After collecting data from all 5 AI tools, I used **Groq** for both discovery research and final consolidation. Groq's discovery research function helped gather additional insights, while its final analysis capabilities helped merge all findings into one comprehensive report with transparent sourcing.
 
 **Most Common Issues (Consolidated AI Analysis):**
 - Privacy concerns (mentioned in 67% of reviews)
@@ -111,7 +130,7 @@ After collecting data from all 5 AI tools, I used Gemini to merge all findings i
 - Expensive subscriptions (mentioned in 72% of reviews)
 
 ### Week 2: AI-Generated Architecture Planning
-After consolidating all AI research findings, I asked Gemini to generate a feature structure:
+After consolidating all AI research findings, I asked **Groq** to generate a feature structure:
 
 **AI Prompt for Architecture:**
 *"Based on these user complaints, create a feature structure for a job tracking app that solves these problems."*
@@ -200,8 +219,8 @@ After launching, I received feedback from users who had the same complaints I or
 ### 1. **Parallel AI Research is More Comprehensive**
 Giving the same task to 5 different AI tools provided diverse perspectives and more comprehensive data collection than using a single AI.
 
-### 2. **AI Consolidation Reveals Patterns**
-Merging findings from multiple AI tools using Gemini helped identify patterns and inconsistencies that individual AI tools missed.
+### 2. **AI Discovery Research + Consolidation Reveals Patterns**
+Using Groq for both discovery research and final consolidation helped identify patterns and inconsistencies that individual AI tools missed. Groq's dual role ensured comprehensive analysis with transparent sourcing.
 
 ### 3. **AI-Generated Architecture Works**
 Asking AI to create feature structure based on user complaints resulted in a more user-focused architecture than manual planning.
@@ -250,11 +269,11 @@ Your contributions are welcome! Check out the [contributing guide](https://githu
 
 ## Conclusion
 
-Building Pathfinder taught me that the best products come from combining parallel AI research with data-driven development. By giving the same research task to 5 different AI tools and consolidating their findings, I created a tool that genuinely solves the problems job seekers face.
+Building Pathfinder taught me that the best products come from combining parallel AI research with AI-powered discovery and consolidation. By giving the same research task to 5 different AI tools (each with unique access) and using Groq for both discovery research and final analysis, I created a tool that genuinely solves the problems job seekers face.
 
-The key insight: **Multiple AI perspectives provide more comprehensive insights than single AI analysis.** By using parallel AI research and then asking AI to generate architecture based on user complaints, I created something that users actually want to use.
+The key insight: **Multiple AI perspectives with AI-powered discovery and consolidation provide more comprehensive and trustworthy insights.** By using parallel AI research and then leveraging Groq's dual capabilities for discovery and final analysis, I created something that users actually want to use.
 
-**What would you build if you used parallel AI research to understand real user problems?**
+**What would you build if you used parallel AI research with AI-powered discovery and consolidation to understand real user problems?**
 
 ---
 
