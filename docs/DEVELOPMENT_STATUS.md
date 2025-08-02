@@ -1,135 +1,135 @@
 # Pathfinder Development Status
 
-## ✅ Что сделано
+## ✅ What's Done
 
-### 1. **Настроен единый стиль кодирования**
-- ✅ ESLint конфигурация (версия 9)
-- ✅ Prettier настройки
-- ✅ Скрипты для линтинга и форматирования
-- ✅ Автоматическое исправление ошибок
+### 1. **Unified Code Style Setup**
+- ✅ ESLint configuration (version 9)
+- ✅ Prettier settings
+- ✅ Linting and formatting scripts
+- ✅ Automatic error fixing
 
-### 2. **Расширен .gitignore**
-- ✅ Исключены файлы IDE (.vscode, .idea)
-- ✅ Исключены временные файлы и кэш
-- ✅ Исключены файлы сборки и логов
-- ✅ Исключены файлы пакетных менеджеров
+### 2. **Extended .gitignore**
+- ✅ Excluded IDE files (.vscode, .idea)
+- ✅ Excluded temporary files and cache
+- ✅ Excluded build files and logs
+- ✅ Excluded package manager files
 
-### 3. **Добавлены тесты**
-- ✅ Vitest настроен
-- ✅ Простые unit тесты
-- ✅ API тесты
-- ✅ React компонент тесты
-- ✅ Тестовое окружение (jsdom)
+### 3. **Added Tests**
+- ✅ Vitest configured
+- ✅ Simple unit tests
+- ✅ API tests
+- ✅ React component tests
+- ✅ Test environment (jsdom)
 
-### 4. **Создана API документация**
-- ✅ Полная документация endpoints
-- ✅ Примеры запросов/ответов
-- ✅ Описание ошибок
-- ✅ Статусы и значения
+### 4. **Created API Documentation**
+- ✅ Complete endpoints documentation
+- ✅ Request/response examples
+- ✅ Error descriptions
+- ✅ Status values and meanings
 
-### 5. **Обновлены скрипты package.json**
-- ✅ `npm run lint` - проверка кода
-- ✅ `npm run lint:fix` - исправление ошибок
-- ✅ `npm run format` - форматирование
-- ✅ `npm test` - запуск тестов
-- ✅ `npm run type-check` - проверка типов
+### 5. **Updated package.json Scripts**
+- ✅ `npm run lint` - code checking
+- ✅ `npm run lint:fix` - error fixing
+- ✅ `npm run format` - formatting
+- ✅ `npm test` - test running
+- ✅ `npm run type-check` - type checking
 
-## ❌ Что еще требует доработки
+## ❌ What Still Needs Work
 
-### 1. **Тесты (частично)**
-- ❌ Нужно больше unit тестов для функций
-- ❌ Нужны integration тесты
-- ❌ Нужны тесты для работы с базой данных
-- ❌ Нужно покрытие кода > 80%
+### 1. **Tests (partially)**
+- ❌ Need more unit tests for functions
+- ❌ Need integration tests
+- ❌ Need database operation tests
+- ❌ Need code coverage > 80%
 
-### 2. **Модульность кода**
-- ❌ Код не структурирован по модулям
-- ❌ Нет четкого разделения ответственности
-- ❌ Отсутствует архитектурная документация
+### 2. **Code Modularity**
+- ❌ Code not structured by modules
+- ❌ No clear separation of responsibilities
+- ❌ Missing architectural documentation
 
-### 3. **Привлечение участников**
-- ❌ Нет активных issues
-- ❌ Нет PR workflow
-- ❌ Нет contribution guidelines (хотя файл есть)
+### 3. **Community Engagement**
+- ❌ No active issues
+- ❌ No PR workflow
+- ❌ No contribution guidelines (file exists but not used)
 
-### 4. **Примеры использования**
-- ❌ Нет демо-данных
-- ❌ Нет примеров API вызовов
-- ❌ Нет документации по развертыванию
+### 4. **Usage Examples**
+- ❌ No demo data
+- ❌ No API call examples
+- ❌ No deployment documentation
 
-## 🚀 Как запустить проект
+## 🚀 How to Run the Project
 
-### Разработка
+### Development
 ```bash
-# Установка зависимостей
+# Install dependencies
 npm install
 
-# Запуск frontend
+# Start frontend
 npm run dev
 
-# Запуск backend (в отдельном терминале)
+# Start backend (in separate terminal)
 cd server && npm start
 ```
 
-### Тестирование
+### Testing
 ```bash
-# Запуск всех тестов
+# Run all tests
 npm test
 
-# Запуск тестов с UI
+# Run tests with UI
 npm run test:ui
 
-# Проверка покрытия
+# Check coverage
 npm run test:coverage
 ```
 
-### Линтинг и форматирование
+### Linting and Formatting
 ```bash
-# Проверка кода
+# Check code
 npm run lint
 
-# Исправление ошибок
+# Fix errors
 npm run lint:fix
 
-# Форматирование
+# Format code
 npm run format
 ```
 
-## 📊 Статистика
+## 📊 Statistics
 
-- **Файлов в проекте**: 25+
-- **Тестов**: 6+ (3 простых + 3 API)
-- **Endpoints API**: 5+
-- **Покрытие линтером**: 95%+
-- **Время сборки**: < 5 секунд
+- **Project files**: 25+
+- **Tests**: 6+ (3 simple + 3 API)
+- **API endpoints**: 5+
+- **Linter coverage**: 95%+
+- **Build time**: < 5 seconds
 
-## 🎯 Следующие шаги
+## 🎯 Next Steps
 
-1. **Приоритет 1**: Добавить больше тестов
-2. **Приоритет 2**: Рефакторинг кода для модульности
-3. **Приоритет 3**: Создать примеры использования
-4. **Приоритет 4**: Настроить CI/CD
-5. **Приоритет 5**: Привлечь контрибьюторов
+1. **Priority 1**: Add more tests
+2. **Priority 2**: Refactor code for modularity
+3. **Priority 3**: Create usage examples
+4. **Priority 4**: Set up CI/CD
+5. **Priority 5**: Engage contributors
 
-## 🔧 Технический стек
+## 🔧 Tech Stack
 
 - **Frontend**: React + TypeScript + Vite
 - **Backend**: Node.js + Express + SQLite
-- **Тестирование**: Vitest + Testing Library
-- **Линтинг**: ESLint + Prettier
-- **Документация**: Markdown
+- **Testing**: Vitest + Testing Library
+- **Linting**: ESLint + Prettier
+- **Documentation**: Markdown
 
-## 📝 Команды для разработки
+## 📝 Development Commands
 
 ```bash
-# Полная проверка проекта
+# Full project check
 npm run lint && npm run format && npm test
 
-# Быстрый запуск
+# Quick start
 npm run dev
 
-# Сборка для продакшена
+# Production build
 npm run build
 ```
 
-Проект готов для дальнейшей разработки! 🚀 
+Project is ready for further development! 🚀 
